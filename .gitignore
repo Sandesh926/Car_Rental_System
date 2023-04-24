@@ -1,3 +1,6 @@
 # Ignoring bin and obj folders
-bin/
-obj/
+/Car_Rental_System/bin/
+/Car_Rental_System/obj/
+
+# .NET VS settings folder
+/.vs/
