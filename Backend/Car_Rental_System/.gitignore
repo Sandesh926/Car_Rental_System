@@ -1,0 +1,6 @@
+# Ignoring bin and obj folders
+bin/
+obj/
+
+# .NET VS settings folder
+.vs/
