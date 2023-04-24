@@ -1,6 +1,7 @@
 # Ignoring bin and obj folders
-/Car_Rental_System/bin/
-/Car_Rental_System/obj/
+Backend/Car_Rental_System/bin/
+Backend/Car_Rental_System/obj/
 
 # .NET VS settings folder
 /.vs/
+/Backend/Car_Rental_System/.vs/
