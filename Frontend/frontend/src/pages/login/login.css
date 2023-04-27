@@ -1,0 +1,155 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.login-section {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+section .bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+section .car {
+  position: absolute;
+  width: 7vw;
+  height: 2.8rem;
+  scale: 6;
+  margin-top: 14vw;
+  size: fixed;
+  animation: animateCar 7s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes animateCar {
+  0% {
+    transform: translateX(calc(100% + 10vw));
+  }
+  50% {
+    transform: translateX(calc(-100% - 10vw));
+  }
+  50.01% {
+    transform: translateX(calc(-100% - 10vw)) rotateY(180deg);
+  }
+  100% {
+    transform: translateX(calc(100% + 15vw)) rotateY(180deg);
+  }
+}
+
+@media (max-width: 952px) {
+  .car {
+    /* display: none; */
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+@media (max-width: 858px) {
+  .car {
+    display: none;
+  }
+}
+
+@media (max-width: 1400px) {
+  .car {
+    width: 11vw;
+    height: 2rem;
+    scale: 6;
+    margin-top: 14vw;
+  }
+}
+
+.login {
+  position: relative;
+  padding: 60px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  /* border: 1px solid #fff; */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+.login h2 {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 2.5em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: rgb(16, 119, 229);
+}
+
+.login .inputBox {
+  position: relative;
+}
+
+.login .inputBox input {
+  position: relative;
+  width: 100%;
+  padding: 15px 20px;
+  outline: none;
+  font-size: 1.25em;
+  border-radius: 5px;
+  background: #fff;
+  border: none;
+  margin-bottom: 30px;
+}
+
+.login .inputBox ::placeholder {
+  color: black;
+}
+
+.login .inputBox #btn {
+  position: relative;
+  border: none;
+  outline: none;
+  background: rgb(16, 119, 229);
+  color: white;
+  cursor: pointer;
+  font-size: 1.25em;
+  font-weight: 500;
+  transition: 0.5s;
+}
+
+.login .inputBox #btn:hover {
+  background: rgb(59, 130, 206);
+}
+
+.login .group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.login .group a {
+  font-size: 1.25em;
+  color: rgb(16, 119, 229);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login .group a:nth-child(2) {
+  text-decoration: underline;
+}
