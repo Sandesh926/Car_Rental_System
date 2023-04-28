@@ -9,7 +9,7 @@ namespace Car_Rental_System.Data
     public sealed class CarsAPIDbContext : IdentityDbContext
     {
         // Creating constructor where we are passing the options and options are being passed to base class
-        public CarsAPIDbContext(DbContextOptions options) : base(options)
+        public CarsAPIDbContext(DbContextOptions<CarsAPIDbContext> options) : base(options)
         {
             Database.EnsureCreated();
             //Database.Migrate();
