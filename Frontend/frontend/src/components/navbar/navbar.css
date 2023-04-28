@@ -1,0 +1,61 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.navbar .title h1 {
+  margin-left: 0.5rem;
+  color: black;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.navbar .notification {
+  display: flex;
+  align-items: center;
+  margin-top: -10px;
+}
+
+.navbar .notification .date {
+  background-color: #f8f9fe;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.navbar .notification .date svg {
+  color: black;
+}
+
+.navbar .notification .date span {
+  color: black;
+}
+
+.navbar .notification .icon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.navbar .notification .icon svg {
+  color: black;
+}
+
+.navbar .notification .icon span {
+  color: black;
+}
+
+.navbar .notification .icon .image {
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar .notification .icon .image img {
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 3rem;
+}
