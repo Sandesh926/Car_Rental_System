@@ -10,10 +10,10 @@ import Car5 from "../../images/car5.jpg";
 import Car6 from "../../images/car6.jpg";
 import Car7 from "../../images/cars7.webp";
 import Car8 from "../../images/cars8.webp";
-import Rev1 from "../../images/rev1.jpg";
+import Rev1 from "../../images/rev1.png";
 import About from "../../images/about.png";
-import Rev2 from "../../images/rev2.jpg";
-import Rev3 from "../../images/rev3.jpg";
+import Rev2 from "../../images/rev2.PNG";
+import Rev3 from "../../images/rev3.PNG";
 import { Link } from "react-router-dom";
 
 function Landing() {
@@ -311,7 +311,7 @@ function Landing() {
             <div className="rev-img">
               <img src={Rev3} alt="" />
             </div>
-            <h2>Selena Gomez</h2>
+            <h2>Amit Bajracharya</h2>
             <div className="stars">
               <i className="bx bxs-star"></i>
               <i className="bx bxs-star"></i>
