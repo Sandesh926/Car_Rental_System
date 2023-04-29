@@ -53,7 +53,7 @@ html::-webkit-scrollbar-thumb {
   padding: 50px 100px;
 }
 
-header {
+.header-main {
   position: fixed;
   width: 100%;
   top: 0;

@@ -1,21 +1,17 @@
-import Landing from "./pages/landing/Landing";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
-import Dashboard from "./pages/dashboard/Dashboard";
-import { Routes, Route } from "react-router-dom";
-import Sidebar from "./components/sidebar/Sidebar";
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import Router from './routes'
+import ThemeProvider from './theme';
 
 function App() {
   return (
-    <div className="App">
-      <Sidebar />
-      <Routes>
-        <Route path="/" index element={<Landing />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="dashboard" element={<Dashboard />} />
-      </Routes>
-    </div>
+    <HelmetProvider>
+      <BrowserRouter>
+        <ThemeProvider>
+          <Router />
+        </ThemeProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

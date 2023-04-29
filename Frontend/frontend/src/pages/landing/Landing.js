@@ -2,14 +2,14 @@ import "./landing.css";
 import Jeep from "../../images/jeep.png";
 import Ios from "../../images/ios.png";
 import Play from "../../images/play.png";
-import Car1 from "../../images/car1.jpg";
+import Car1 from "../../images/car1.webp";
 import Car2 from "../../images/car2.jpg";
 import Car3 from "../../images/car3.jpg";
 import Car4 from "../../images/car4.jpg";
 import Car5 from "../../images/car5.jpg";
 import Car6 from "../../images/car6.jpg";
-import Car7 from "../../images/cars7.webp";
-import Car8 from "../../images/cars8.webp";
+import Car7 from "../../images/car7.webp";
+import Car8 from "../../images/car8.png";
 import Rev1 from "../../images/rev1.png";
 import About from "../../images/about.png";
 import Rev2 from "../../images/rev2.PNG";
@@ -20,17 +20,17 @@ function Landing() {
   return (
     <>
       {/* Header */}
-      <header>
+      <header className="header-main">
         <Link to="/" className="logo">
           <img src={Jeep} alt="Jeep Image" />
         </Link>
         <div className="bx bx-menu" id="menu-icon"></div>
         <div className="header-btn">
           <Link to="/register" className="sign-up">
-            Sign Up
+            Register
           </Link>
           <Link to="/login" className="sign-in">
-            Sign In
+            Login
           </Link>
         </div>
       </header>
@@ -43,31 +43,13 @@ function Landing() {
             rent a car
           </h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adi <br />
-            pisicing elit. Accusantium, ad cupiditate.
+            Look no further than our car rental system <br />
+             for a hassle-free rental experience.
           </p>
           <div className="app-stores">
             <img src={Ios} alt="AppStore Image" />
             <img src={Play} alt="PlayStore Image" />
           </div>
-        </div>
-
-        <div className="form-container">
-          <form action="">
-            <div className="input-box">
-              <span>Location</span>
-              <input type="search" name="" id="" placeholder="Search Places" />
-            </div>
-            <div className="input-box">
-              <span>Pick-Up Date</span>
-              <input type="date" name="" id="" />
-            </div>
-            <div className="input-box">
-              <span>Return Date</span>
-              <input type="date" name="" id="" />
-            </div>
-            <input type="submit" name="" id="" className="btn" />
-          </form>
         </div>
       </section>
 
@@ -82,8 +64,7 @@ function Landing() {
             <i className="bx bxs-map"></i>
             <h2>Choose A Location</h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-              doloribus aspernatur eveniet dignissimos eius saepe.
+            Choose the perfect rental location for your needs from our diverse range of options.
             </p>
           </div>
 
@@ -91,8 +72,7 @@ function Landing() {
             <i className="bx bxs-calendar-check"></i>
             <h2>Pick-Up Date</h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-              doloribus aspernatur eveniet dignissimos eius saepe.
+            Select the ideal pick-up date for your rental with our flexible booking system.
             </p>
           </div>
 
@@ -100,8 +80,7 @@ function Landing() {
             <i className="bx bxs-calendar-star"></i>
             <h2>Book A Car</h2>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-              doloribus aspernatur eveniet dignissimos eius saepe.
+            Book your rental car quickly and easily online or in-person with our user-friendly system.
             </p>
           </div>
         </div>
@@ -122,112 +101,112 @@ function Landing() {
             <div className="box-img">
               <img src={Car1} alt="" />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Toyota Corolla</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs. 6550 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
 
           <div className="box">
             <div className="box-img">
               <img src={Car2} alt="" />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Honda Civic</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs. 4200 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
 
           <div className="box">
             <div className="box-img">
               <img src={Car3} alt="" />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Ford Mustand</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs. 20000 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
 
           <div className="box">
             <div className="box-img">
-              <img src={Car4} alt="" />
+              <img src={Car4} />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Chevrolet Camaro</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs. 15000 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
 
           <div className="box">
             <div className="box-img">
-              <img src={Car5} alt="" />
+              <img src={Car5} />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Jeep Wrangler</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs. 8000 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
 
           <div className="box">
             <div className="box-img">
-              <img src={Car6} alt="" />
+              <img src={Car6} />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Ford F-150</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs.5000 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
 
           <div className="box">
             <div className="box-img">
-              <img src={Car7} alt="" />
+              <img src={Car7} />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Toyota RAV4</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs. 7500 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
 
           <div className="box">
             <div className="box-img">
-              <img src={Car8} alt="" />
+              <img src={Car8} />
             </div>
-            <p>2017</p>
-            <h3>2018 Honda Civic</h3>
+            <p>2023</p>
+            <h3>Tesla Model 3</h3>
             <h2>
-              $58500 | $358 <span>/month</span>
+              Rs. 12000 <span>/day</span>
             </h2>
-            <a href="#" className="btn">
+            <Link to="/login" className="btn">
               Rent Now
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -240,20 +219,15 @@ function Landing() {
         </div>
         <div className="about-container">
           <div className="about-img">
-            <img src={About} alt="" />
+            <img src={About} />
           </div>
           <div className="about-text">
             <span>About Us</span>
             <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corporis
-              consequatur sint esse cupiditate rem numquam nemo optio,
-              necessitatibus voluptatem minus quisquam sequi tempora a aliquam
-              sunt ea! Libero cupiditate quod, saepe autem quidem est.
+            At our car rental system, we strive to provide hassle-free rental experiences. Our well-maintained vehicles, competitive rates, and exceptional customer service ensure you get the most out of your rental. Book online or in-person and let us take care of the rest.
             </p>
             <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et
-              numquam saepe delectus quia quaerat maiores eius placeat
-              cupiditate.
+            Diverse fleet, affordable rates, and exceptional service make us the go-to choice for stress-free car rentals.
             </p>
             <Link to="/login" className="btn">
               Learn More
@@ -271,7 +245,7 @@ function Landing() {
         <div className="reviews-container">
           <div className="box">
             <div className="rev-img">
-              <img src={Rev1} alt="" />
+              <img src={Rev1} />
             </div>
             <h2>Bijay Baniya</h2>
             <div className="stars">
@@ -282,15 +256,13 @@ function Landing() {
               <i className="bx bxs-star-half"></i>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptates eligendi ratione accusantium, beatae natus vel mollitia
-              itaque labore?
+            Convenient online booking, competitive rates, and top-notch fleet make this car rental system a standout choice.
             </p>
           </div>
 
           <div className="box">
             <div className="rev-img">
-              <img src={Rev2} alt="" />
+              <img src={Rev2} />
             </div>
             <h2>Sandesh Bhurtyal</h2>
             <div className="stars">
@@ -301,15 +273,13 @@ function Landing() {
               <i className="bx bxs-star-half"></i>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptates eligendi ratione accusantium, beatae natus vel mollitia
-              itaque labore?
+            Efficient, user-friendly, affordable car rental system with a great selection of vehicles and excellent customer service.
             </p>
           </div>
 
           <div className="box">
             <div className="rev-img">
-              <img src={Rev3} alt="" />
+              <img src={Rev3} />
             </div>
             <h2>Amit Bajracharya</h2>
             <div className="stars">
@@ -320,9 +290,7 @@ function Landing() {
               <i className="bx bxs-star-half"></i>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
-              aliquid perspiciatis nesciunt corrupti ullam quas, quaerat nihil
-              asperiores!
+            Smooth and hassle-free car rental experience with reliable vehicles and helpful staff. Highly recommended.
             </p>
           </div>
         </div>
