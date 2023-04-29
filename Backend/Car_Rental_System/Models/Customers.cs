@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
@@ -14,11 +15,14 @@ namespace Car_Rental_System.Models
         [Required]
         [EmailAddress]
         public string Customer_Email { get; set; }
+
+        //public string Password { get; set; }
+
         [Required]
-        public long Customer_Phone { get; set; }
+        public string Customer_Phone { get; set; }
         [Required]
         public string Customer_Address { get; set; } 
-        public byte[]? Cutomer_Document { get; set; }
+        //public byte[]? Cutomer_Document { get; set; }
         public bool IsRegular { get; set; }
         public decimal RegularDiscount { get; set; }
         public DateTime? LastRentalDate { get; set; }

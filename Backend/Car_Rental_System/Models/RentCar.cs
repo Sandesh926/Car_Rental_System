@@ -6,7 +6,7 @@ namespace Car_Rental_System.Models
     {
         [Key]
         public Guid Rent_id { get; set; }
-        public DateOnly Rent_date { get; set; }
+        public DateTime Rent_date { get; set; }
 
         public int car_id { get; set; }
         public int customer_id { get; set; }
