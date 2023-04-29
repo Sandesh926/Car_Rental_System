@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Car_Rental_System.Data
 {
-    // This class inherits from the Db COntext
+    // This class inherits from the Identity Db COntext class provided by entity framework core
     public sealed class CarsAPIDbContext : IdentityDbContext
     {
         // Creating constructor where we are passing the options and options are being passed to base class
