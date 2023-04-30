@@ -44,7 +44,6 @@ namespace Car_Rental_System.Controllers
                 Customer_lastName = registerCustomer.Customer_lastName,
                 Customer_Phone = registerCustomer.Customer_Phone,
                 Customer_Address = registerCustomer.Customer_Address,
-                //Cutomer_Document = registerCustomer.Cutomer_Document,
                 Customer_Email = registerCustomer.Customer_Email,
                 Password = hashedPassword
             };
@@ -92,6 +91,34 @@ namespace Car_Rental_System.Controllers
             };
             return Ok(loginReply);
         }
+
+
+        //upload image for customer
+        [HttpPost("{customerId}/document")]
+        public async Task<IActionResult> AddDocument(Guid customerId, IFormFile documentFile)
+        {
+            var customer = await dbContext.Customers.FindAsync(customerId);
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            // Convert the document file to a byte array
+            byte[] documentData = null;
+            using (var ms = new MemoryStream())
+            {
+                await documentFile.CopyToAsync(ms);
+                documentData = ms.ToArray();
+            }
+
+            // Update the customer's document in the database
+            customer.Cutomer_Document = documentData;
+            await dbContext.SaveChangesAsync();
+
+            return Ok("Document added successfully.");
+        }
+
+        
 
 
 
