@@ -12,11 +12,13 @@ namespace Car_Rental_System.Models
         public string Customer_firstName { get; set; }
 
         public string Customer_lastName { get; set; }
+
         [Required]
         [EmailAddress]
         public string Customer_Email { get; set; }
 
-        //public string Password { get; set; }
+        [Required]
+        public string Password { get; set; }
 
         [Required]
         public string Customer_Phone { get; set; }

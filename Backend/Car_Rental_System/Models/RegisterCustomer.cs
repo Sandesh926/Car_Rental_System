@@ -10,6 +10,10 @@ namespace Car_Rental_System.Models
         [Required]
         [EmailAddress]
         public string Customer_Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+
         [Required]
         public string Customer_Phone { get; set; }
         [Required]

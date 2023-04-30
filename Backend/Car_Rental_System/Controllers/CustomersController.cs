@@ -1,6 +1,11 @@
-﻿using Car_Rental_System.Data;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Car_Rental_System.Data;
 using Car_Rental_System.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Car_Rental_System.Controllers
 {
@@ -18,34 +23,20 @@ namespace Car_Rental_System.Controllers
         {
             this.dbContext = dbContext;
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetCars()
-        //{
-        //    // returing the list of car in 200 response
-        //    return Ok(await dbContext.Cars.ToListAsync());
-        //}
-
-        //[HttpGet]
-        //[Route("{car_id:guid}")]
-        //// Getting single car details
-        //public async Task<IActionResult> GetCar([FromRoute] Guid car_id)
-        //{
-        //    // It interacts with the database cars and find that car using id
-        //    var car = await dbContext.Cars.FindAsync(car_id);
-
-        //    if (car == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(car);
-        //}
-
-
-        // Whenever we add car we add http verb post
+        
         [HttpPost]
         // using this we will create a customer object
         public async Task<IActionResult> AddCustomer(RegisterCustomer registerCustomer)
         {
+            // Check if email already exists in the database
+            var existingCustomer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Email == registerCustomer.Customer_Email);
+            if (existingCustomer != null)
+            {
+                return BadRequest("Email already exists in the database.");
+            }
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(registerCustomer.Password);
+    
             var customer = new Customers()
             {
                 Customer_Id = Guid.NewGuid(),
@@ -55,35 +46,49 @@ namespace Car_Rental_System.Controllers
                 Customer_Address = registerCustomer.Customer_Address,
                 //Cutomer_Document = registerCustomer.Cutomer_Document,
                 Customer_Email = registerCustomer.Customer_Email,
-                //Password = registerCustomer.Password
+                Password = hashedPassword
             };
 
             await dbContext.Customers.AddAsync(customer);
-            //saving customer object in database 
             await dbContext.SaveChangesAsync();
-            //returing the api request
             return Ok(customer);
         }
 
-        // Update car method
-        //[HttpPut]
-        //[Route("{car_id:guid}")]
-        //public async Task<IActionResult> UpdateCar([FromRoute] Guid car_id, UpdateCarRequest updateCarRequest)
-        //{
-        //    var car = await dbContext.Cars.FindAsync(car_id);
-        //    if (car != null)
-        //    {
-        //        car.Car_Name = updateCarRequest.Car_Name;
-        //        car.Car_Model = updateCarRequest.Car_Model;
-        //        car.Year = updateCarRequest.Year;
-        //        car.Color = updateCarRequest.Color;
-        //        car.Rent_Price = updateCarRequest.Rent_Price;
-        //        car.Availability_Status = updateCarRequest.Availability_Status;
 
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(car);
-        //    }
-        //    return NotFound();
-        //}
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginCustomer loginCustomer)
+        {
+            var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Email == loginCustomer.Customer_Email);
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+    
+            if (!BCrypt.Net.BCrypt.Verify(loginCustomer.Password, customer.Password))
+            {
+                return BadRequest("Invalid password.");
+            }
+    
+            // Generate a JWT token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("AShfhajfsgahbfjhbashj.asd@shajfhjas"); 
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, customer.Customer_Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+    
+            // Return the JWT token
+            return Ok(new { token = tokenString });
+        }
+
+
+
     }
 }
