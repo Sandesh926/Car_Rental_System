@@ -70,7 +70,7 @@ namespace Car_Rental_System.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            var loginReply = new LoginReply(
+            var loginReply = new LoginReply
             {
                 Token = tokenString,
                 Email = staff.Staff_Email,
