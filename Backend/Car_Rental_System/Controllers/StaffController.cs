@@ -23,19 +23,19 @@ namespace Car_Rental_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStaff(Staff staff)
+        public async Task<IActionResult> AddStaff(RegisterStaff registerStaff)
         {
-            var existingStaff = await dbContext.Staff.FirstOrDefaultAsync(s => s.Staff_Email == staff.Staff_Email);
+            var existingStaff = await dbContext.Staff.FirstOrDefaultAsync(s => s.Staff_Email == registerStaff.Staff_Email);
             if (existingStaff != null)
             {
                 return BadRequest("Email already exists in the database.");
             }
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(staff.Staff_Password);
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(registerStaff.Staff_Password);
             var newStaff = new Staff()
             {
                 Staff_Id = Guid.NewGuid(),
-                Staff_Name = staff.Staff_Name,
-                Staff_Email = staff.Staff_Email,
+                Staff_Name = registerStaff.Staff_Name,
+                Staff_Email = registerStaff.Staff_Email,
                 Staff_Password = hashedPassword
             };
             await dbContext.Staff.AddAsync(newStaff);

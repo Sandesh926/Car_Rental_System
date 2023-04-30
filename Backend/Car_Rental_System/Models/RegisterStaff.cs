@@ -2,10 +2,8 @@
 
 namespace Car_Rental_System.Models
 {
-    public class Staff
+    public class RegisterStaff
     {
-        [Key]
-        public Guid Staff_Id { get; set; }
         public string Staff_Name { get; set; }
 
         [Required]
@@ -14,9 +12,5 @@ namespace Car_Rental_System.Models
 
         public string Staff_Password { get; set; }
 
-        public int? Rating { get; set; }
-
-        public string Staff_Discount { get; set; } = "25%";
-        public int Role_id { get; set; } = 2;
     }
 }
