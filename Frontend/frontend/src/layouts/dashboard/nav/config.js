@@ -1,10 +1,14 @@
 // component
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import LoginIcon from '@mui/icons-material/Login';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
-import ChatIcon from '@mui/icons-material/Chat';
+import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DriveEtaIcon from '@mui/icons-material/DriveEta';
+import DescriptionIcon from '@mui/icons-material/Description';
+import PeopleIcon from '@mui/icons-material/People';
+import ToysIcon from '@mui/icons-material/Toys';
+import CarCrashIcon from '@mui/icons-material/CarCrash';
 
 const navConfig = [
   {
@@ -13,24 +17,44 @@ const navConfig = [
     icon: <DashboardIcon />,
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
+    title: 'Add staff',
+    path: '/dashboard/staff',
     icon: <AccountBoxIcon />,
   },
   {
-    title: 'attendance',
-    path: '/dashboard/products',
-    icon: <SummarizeIcon />,
+    title: 'Add admin',
+    path: '/dashboard/admin',
+    icon: <AccountCircleIcon />,
   },
   {
-    title: 'chat',
-    path: '/dashboard/chat',
-    icon: <ChatIcon />,
+    title: 'car inventory',
+    path: '/dashboard/car',
+    icon: <TimeToLeaveIcon />,
   },
   {
-    title: 'login',
-    path: '/login',
-    icon: <LoginIcon />,
+    title: 'rented cars',
+    path: '/dashboard/rentedcars',
+    icon: <DriveEtaIcon />,
+  },
+  {
+    title: 'return cars',
+    path: '/dashboard/returncars',
+    icon: <ToysIcon />,
+  },
+  {
+    title: 'sales',
+    path: '/dashboard/sales',
+    icon: <DescriptionIcon />,
+  },
+  {
+    title: 'track customer',
+    path: '/dashboard/trackcustomer',
+    icon: <PeopleIcon />,
+  },
+  {
+    title: 'car damage',
+    path: '/dashboard/cardamage',
+    icon: <CarCrashIcon />,
   },
   {
     title: 'Not found',

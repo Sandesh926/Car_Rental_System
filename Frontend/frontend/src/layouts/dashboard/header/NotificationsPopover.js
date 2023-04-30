@@ -24,7 +24,7 @@ import {
 import { fToNow } from '../../../utils/formatTime';
 // components
 import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
+// import Scrollbar from '../../../components/scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -141,7 +141,7 @@ export default function NotificationsPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
+        {/* <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}> */}
           <List
             disablePadding
             subheader={
@@ -167,7 +167,7 @@ export default function NotificationsPopover() {
               <NotificationItem key={notification.id} notification={notification} />
             ))}
           </List>
-        </Scrollbar>
+        {/* </Scrollbar> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

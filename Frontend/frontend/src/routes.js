@@ -8,9 +8,14 @@ import Page404 from "./pages/Page404";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import LandingPage from "./pages/landing/Landing";
 import RegisterPage from "./pages/register/Register";
-import UserPage from "./pages/UserPage";
-import BlogPage from "./pages/BlogPage";
-import ProductsPage from "./pages/ProductsPage";
+import StaffPage from "./pages/StaffPage";
+import AdminPage from "./pages/AdminPage";
+import TrackCustomer from "./pages/TrackCustomer";
+import CarInventory from "./pages/CarInventory";
+import RentedCars from "./pages/RentedCars";
+import SalesPage from "./pages/SalesPage";
+import CarDamage from "./pages/CarDamage";
+import ReturnCar from "./pages/ReturnCar";
 
 // ----------------------------------------------------------------------
 
@@ -37,9 +42,14 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { path: 'staff', element: <StaffPage /> },
+        { path: 'admin', element: <AdminPage /> },
+        { path: 'car', element: <CarInventory /> },
+        { path: 'rentedcars', element: <RentedCars /> },
+        { path: 'sales', element: <SalesPage /> },
+        { path: 'trackcustomer', element: <TrackCustomer /> },
+        { path: 'cardamage', element: <CarDamage /> },
+        { path: 'returncars', element: <ReturnCar /> },
       ],
     },
     {
