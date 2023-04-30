@@ -56,9 +56,9 @@ namespace Car_Rental_System.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginCustomer loginCustomer)
+        public async Task<IActionResult> Login(Login loginCustomer)
         {
-            var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Email == loginCustomer.Customer_Email);
+            var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Email == loginCustomer.Email);
             if (customer == null)
             {
                 return NotFound("Customer not found.");
@@ -83,9 +83,14 @@ namespace Car_Rental_System.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
-    
-            // Return the JWT token
-            return Ok(new { token = tokenString });
+
+            var loginReply = new LoginReply
+            {
+                Token = tokenString,
+                Email = customer.Customer_Email,
+                Name = $"{customer.Customer_firstName} {customer.Customer_lastName}"
+            };
+            return Ok(loginReply);
         }
 
 

@@ -18,6 +18,7 @@ namespace Car_Rental_System.Data
         // Creating the properties which acts as tables for entity framework core
         public DbSet<Cars> Cars { get; set; }
         public DbSet<Admin> Admin { get; set; }
+        public DbSet<Staff> Staff { get; set; }
         public DbSet<Customers> Customers { get; set; }
         public DbSet<RentCar> RentCar { get; set; }
     }

@@ -11,6 +11,7 @@ namespace Car_Rental_System.Models
         [Required]
         [EmailAddress]
         public string Admin_email { get; set;}
-        public string Role_id { get; set;}
+
+        public int Role_id { get; set; } = 1;
     }
 }

@@ -2,12 +2,12 @@
 
 namespace Car_Rental_System.Models
 {
-    public class LoginCustomer
+    public class Login
     {
 
         [Required]
         [EmailAddress]
-        public string Customer_Email { get; set; }
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }

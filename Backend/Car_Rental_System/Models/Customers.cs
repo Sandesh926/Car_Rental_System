@@ -28,6 +28,8 @@ namespace Car_Rental_System.Models
         public bool IsRegular { get; set; }
         public decimal RegularDiscount { get; set; }
         public DateTime? LastRentalDate { get; set; }
-        public DateTime RegistrationDate { get; set; }
+        public DateTime RegistrationDate { get; set; } = DateTime.Now;
+
+        public int Role_id { get; set; } = 3;
     }
 }
