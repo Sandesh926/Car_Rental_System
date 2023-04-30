@@ -14,6 +14,7 @@ import useResponsive from '../../../hooks/useResponsive';
 import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
+import {useState} from "react";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,18 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
+
+  const [adminRole, setAdminRole] = useState("");
+
+  useEffect(() => {
+    const role = window.localStorage.getItem("role");
+    if (role === "admin") {
+      setAdminRole(role);
+    }
+  }, []);
+
+  const data = window.localStorage.getItem("token");
+  const obj = JSON.parse(data);
 
   const isDesktop = useResponsive('up', 'lg');
 
@@ -65,7 +78,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {adminRole ? obj.admin_name : obj.name}
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
