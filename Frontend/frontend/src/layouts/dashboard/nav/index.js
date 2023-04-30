@@ -10,7 +10,7 @@ import account from '../../../_mock/account';
 import useResponsive from '../../../hooks/useResponsive';
 // components
 // import Logo from '../../../components/logo';
-import Scrollbar from '../../../components/scrollbar';
+// import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
@@ -47,12 +47,13 @@ export default function Nav({ openNav, onCloseNav }) {
   }, [pathname]);
 
   const renderContent = (
-    <Scrollbar
-      sx={{
-        height: 1,
-        '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
-      }}
-    >
+    // <Scrollbar
+    //   sx={{
+    //     height: 1,
+    //     '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
+    //   }}
+    // >
+    <>
       <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
         {/* <Logo /> */}
       </Box>
@@ -78,7 +79,8 @@ export default function Nav({ openNav, onCloseNav }) {
       <NavSection data={navConfig} />
 
       <Box sx={{ flexGrow: 1 }} />
-    </Scrollbar>
+    {/* </Scrollbar> */}
+    </>
   );
 
   return (

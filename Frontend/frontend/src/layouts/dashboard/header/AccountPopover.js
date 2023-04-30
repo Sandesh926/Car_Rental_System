@@ -7,8 +7,6 @@ import account from '../../../_mock/account';
 
 import AvatarImg from './images/avatar.webp'
 
-import {Link} from 'react-router-dom'
-
 import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
@@ -23,7 +21,7 @@ const MENU_OPTIONS = [
     icon: 'eva:person-fill',
   },
   {
-    label: 'Settings',
+    label: 'Change Password',
     icon: 'eva:settings-2-fill',
   },
 ];
@@ -44,6 +42,7 @@ export default function AccountPopover() {
   };
 
   const handleLogout = () => {
+    window.localStorage.clear();
     navigate("/");
   }
 

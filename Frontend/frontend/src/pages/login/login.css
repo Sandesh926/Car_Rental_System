@@ -17,7 +17,7 @@
   overflow-x: hidden;
 }
 
-section .bg {
+.login-section .bg {
   position: absolute;
   top: 0;
   left: 0;
@@ -27,7 +27,7 @@ section .bg {
   pointer-events: none;
 }
 
-section .car {
+.login-section .car {
   position: absolute;
   width: 7vw;
   height: 2.8rem;
@@ -78,8 +78,9 @@ section .car {
 .login {
   position: relative;
   padding: 60px;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
+  /* background: rgba(255, 255, 255, 0.25); */
+  /* backdrop-filter: blur(40px); */
+  background: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   border-right: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 20px;
@@ -99,55 +100,3 @@ section .car {
   margin-bottom: 10px;
   color: rgb(16, 119, 229);
 }
-/*
-.login .inputBox {
-  position: relative;
-}
-
-.login .inputBox input {
-  position: relative;
-  width: 100%;
-  padding: 15px 20px;
-  outline: none;
-  font-size: 1.25em;
-  border-radius: 5px;
-  background: #fff;
-  border: none;
-  margin-bottom: 30px;
-}
-
-.login .inputBox ::placeholder {
-  color: black;
-}
-
-.login .inputBox #btn {
-  position: relative;
-  border: none;
-  outline: none;
-  background: rgb(16, 119, 229);
-  color: white;
-  cursor: pointer;
-  font-size: 1.25em;
-  font-weight: 500;
-  transition: 0.5s;
-}
-
-.login .inputBox #btn:hover {
-  background: rgb(59, 130, 206);
-}
-
-.login .group {
-  display: flex;
-  justify-content: space-between;
-}
-
-.login .group a {
-  font-size: 1.25em;
-  color: rgb(16, 119, 229);
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.login .group a:nth-child(2) {
-  text-decoration: underline;
-} */

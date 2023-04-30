@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
-import Scrollbar from '../components/scrollbar';
+// import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 import USERLIST from '../_mock/user';
 import { Modal } from 'antd';
@@ -66,7 +66,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function AdminPage() {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -156,18 +156,18 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Admin | Car Rental </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Admin
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={showModal}>
-            New User
+            Add Admin
           </Button>
-          <Modal title="Register User" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <Modal title="Register Admin" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             <p>Some contents...</p>
             <p>Some contents...</p>
             <p>Some contents...</p>
@@ -177,7 +177,7 @@ export default function UserPage() {
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          <Scrollbar>
+          {/* <Scrollbar> */}
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
@@ -259,7 +259,7 @@ export default function UserPage() {
                 )}
               </Table>
             </TableContainer>
-          </Scrollbar>
+          {/* </Scrollbar> */}
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
