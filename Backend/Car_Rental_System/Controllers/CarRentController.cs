@@ -36,7 +36,8 @@ namespace Car_Rental_System.Controllers
             var carRentObj = new RentCar()
             {
                 Rent_id = Guid.NewGuid(),
-                Rent_date = carRent.Rent_date,
+                Rent_date_From = carRent.Rent_date_From,
+                Rent_date_To = carRent.Rent_date_To,
                 Car_id = carRent.Car_id.ToString(),
                 Customer_id = customer.Customer_Id.ToString(),
                 Staff_id = carRent.Staff_id.ToString(),
@@ -69,7 +70,7 @@ namespace Car_Rental_System.Controllers
         }
 
         //Add staff name and change rent status to rented
-        [HttpPut]
+        [HttpPut("/accept")]
         public async Task<IActionResult> AcceptCarRent(string car_id, string staff_id)
         {
             var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
@@ -89,7 +90,7 @@ namespace Car_Rental_System.Controllers
         }
 
         //Change rent status to rejected
-        [HttpPut]
+        [HttpPut("/reject")]
         public async Task<IActionResult> RejectCarRent(string car_id, string staff_id)
         {
             var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
@@ -107,6 +108,7 @@ namespace Car_Rental_System.Controllers
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
         }
+
 
         
     }
