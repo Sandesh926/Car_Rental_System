@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
@@ -30,6 +30,21 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+
+  const [adminRole, setAdminRole] = useState("");
+
+  useEffect(() => {
+    const role = window.localStorage.getItem("role");
+    if (role === "admin") {
+      setAdminRole(role);
+    }
+  }, []);
+
+  const data = window.localStorage.getItem("token");
+  const obj = JSON.parse(data);
+
+  const role = window.localStorage.getItem("role");
+  const objRole = role;
 
   const navigate = useNavigate();
 
@@ -89,10 +104,13 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {adminRole ? obj.admin_name : obj.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {adminRole ? obj.admin_email : obj.email}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+            {`Role: ${objRole}`}
           </Typography>
         </Box>
 
