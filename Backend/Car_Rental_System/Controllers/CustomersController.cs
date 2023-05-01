@@ -137,6 +137,13 @@ namespace Car_Rental_System.Controllers
         }
 
 
+        //get all customers
+        [HttpGet]
+        public async Task<IActionResult> GetAllCustomers()
+        {
+            var customers = await dbContext.Customers.ToListAsync();
+            return Ok(customers);
+        }
 
         
 
