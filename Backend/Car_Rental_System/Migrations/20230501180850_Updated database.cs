@@ -107,6 +107,23 @@ namespace Car_Rental_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DamageCar",
+                columns: table => new
+                {
+                    Damage_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DamageDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    car_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    customer_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    staff_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DamageCharge = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Charge_status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DamageCar", x => x.Damage_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RentCar",
                 columns: table => new
                 {
@@ -114,8 +131,9 @@ namespace Car_Rental_System.Migrations
                     Rent_date_From = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Rent_date_To = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Car_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Customer_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Customer_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Staff_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rent_Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -312,6 +330,9 @@ namespace Car_Rental_System.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "DamageCar");
 
             migrationBuilder.DropTable(
                 name: "RentCar");

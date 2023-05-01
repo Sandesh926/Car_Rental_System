@@ -138,18 +138,52 @@ namespace Car_Rental_System.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Car_Rental_System.Models.DamageCar", b =>
+                {
+                    b.Property<Guid>("Damage_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Charge_status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("DamageCharge")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DamageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("car_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("customer_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("staff_id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Damage_id");
+
+                    b.ToTable("DamageCar");
+                });
+
             modelBuilder.Entity("Car_Rental_System.Models.RentCar", b =>
                 {
                     b.Property<Guid>("Rent_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Car_id")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Customer_id")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Rent_Status")
