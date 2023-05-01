@@ -80,6 +80,14 @@ namespace Car_Rental_System.Controllers
             return Ok(loginReply);
         }
 
+        //get all admin
+        [HttpGet]
+        public async Task<IActionResult> GetAllAdmin()
+        {
+            var admin = await dbContext.Admin.ToListAsync();
+            return Ok(admin);
+        }
+
 
     }
 }
