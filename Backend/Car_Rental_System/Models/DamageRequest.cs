@@ -4,7 +4,7 @@ namespace Car_Rental_System.Models
 {
     public class DamageRequest
     {
-        public DateOnly DamageDate { get; set; }
+        public DateTime DamageDate { get; set; }
 
         public string car_id { get; set; }
     }

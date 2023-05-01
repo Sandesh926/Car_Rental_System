@@ -7,7 +7,7 @@ namespace Car_Rental_System.Models
     {
         [Key]
         public Guid Damage_id { get; set; }
-        public DateOnly DamageDate{ get; set; }
+        public DateTime DamageDate{ get; set; }
 
         [ForeignKey("Cars")]
         public string car_id { get; set; }
