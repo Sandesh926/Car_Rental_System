@@ -17,7 +17,7 @@ namespace Car_Rental_System.Models
         [ForeignKey("Customers")]
         public string Customer_id { get; set; }
 
-        [ForeignKey("Staff")]
+        [ForeignKey("Customers")]
         public string? Staff_id { get; set; }
         public string Rent_Status { get; set; }
     }

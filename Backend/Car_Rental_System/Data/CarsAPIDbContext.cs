@@ -21,5 +21,7 @@ namespace Car_Rental_System.Data
         public DbSet<Staff> Staff { get; set; }
         public DbSet<Customers> Customers { get; set; }
         public DbSet<RentCar> RentCar { get; set; }
+
+        public DbSet<DamageCar> DamageCar { get; set; }
     }
 }
