@@ -80,5 +80,13 @@ namespace Car_Rental_System.Controllers
 
             return Ok(new { tokenString });
         }
+        //Getting the list of staff details
+        [HttpGet]
+        public async Task<IActionResult> GetStaff()
+        {
+            // returing the list of staff in 200 response
+            return Ok(await dbContext.Staff.ToListAsync());
+        }
+
     }
 }
