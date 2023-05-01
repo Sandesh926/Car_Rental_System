@@ -3,7 +3,7 @@ import Background from "../../images/bg.jpg";
 import Car from "../../images/ferrari.png";
 import { Link as RouterLink } from "react-router-dom";
 import { TextField, Button, Typography, Grid, Link } from "@mui/material";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 function Register() {
   const [firstName, setFirstName] = useState("");
@@ -12,6 +12,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  // const [document, setDocument] = useState("");
 
   // const form = useRef();
 
@@ -31,7 +32,7 @@ function Register() {
           customer_Email: email,
           password,
           customer_Phone: phone,
-          customer_Address: address
+          customer_Address: address,
         }),
       })
         .then((res) => res.json())
@@ -39,7 +40,7 @@ function Register() {
           console.log(data);
             console.log("Customer Registered!");
             // form.current.reset();
-        }) .catch((error) => {
+        }).catch((error) => {
           console.log(error);
         });
   }
@@ -105,11 +106,12 @@ function Register() {
           </Grid>
           {/* </form> */}
         </Grid>
-        <TextField
+        {/* <TextField
           id="license"
           label="Driving License or Citizenship"
           variant="filled"
-        />
+          onChange={(e) => setDocument(e.target.value)}
+        /> */}
         <Button
           onClick={handleSubmit}
           fullWidth

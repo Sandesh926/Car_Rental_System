@@ -32,11 +32,14 @@ export default function AccountPopover() {
   const [open, setOpen] = useState(null);
 
   const [adminRole, setAdminRole] = useState("");
+  const [staffRole, setStaffRole] = useState("");
 
   useEffect(() => {
     const role = window.localStorage.getItem("role");
     if (role === "admin") {
       setAdminRole(role);
+    } else if (role === "staff") {
+      setStaffRole(role);
     }
   }, []);
 

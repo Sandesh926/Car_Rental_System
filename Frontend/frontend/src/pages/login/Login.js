@@ -54,7 +54,7 @@ function Login() {
             window.localStorage.setItem(`${role}loggedIn`, true);
             window.localStorage.setItem("role", role);
             window.location.href = "./dashboard/app";
-        }) .catch((error) => {
+        }).catch((error) => {
           console.log(error);
         });
     } else if (role === "admin") {
@@ -77,7 +77,31 @@ function Login() {
             window.localStorage.setItem(`${role}loggedIn`, true);
             window.localStorage.setItem("role", role);
             window.location.href = "./dashboard/app";
-        }) .catch((error) => {
+        }).catch((error) => {
+          console.log(error)
+        });
+    } else if (role === "staff") {
+      fetch("https://localhost:7116/api/Staff/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          Password: password,
+          Email: email,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          
+            window.localStorage.setItem("token", JSON.stringify(data));
+            window.localStorage.setItem(`${role}loggedIn`, true);
+            window.localStorage.setItem("role", role);
+            window.location.href = "./dashboard/app";
+        }).catch((error) => {
           console.log(error)
         });
     }
