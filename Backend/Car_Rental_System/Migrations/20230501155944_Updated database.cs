@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Car_Rental_System.Migrations
 {
     /// <inheritdoc />
-    public partial class migrations1 : Migration
+    public partial class Updateddatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,7 @@ namespace Car_Rental_System.Migrations
                     Admin_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Admin_password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Admin_email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role_id = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Role_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,6 +66,24 @@ namespace Car_Rental_System.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cars",
+                columns: table => new
+                {
+                    Car_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Car_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Car_Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rent_Price = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Availability_Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cars", x => x.Car_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -73,13 +91,15 @@ namespace Car_Rental_System.Migrations
                     Customer_firstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Customer_lastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Customer_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Customer_Phone = table.Column<long>(type: "bigint", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Customer_Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Customer_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cutomer_Document = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Customer_Document = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     IsRegular = table.Column<bool>(type: "bit", nullable: false),
-                    RegularDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RegularDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     LastRentalDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Role_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,15 +111,33 @@ namespace Car_Rental_System.Migrations
                 columns: table => new
                 {
                     Rent_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Rent_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    car_id = table.Column<int>(type: "int", nullable: false),
-                    customer_id = table.Column<int>(type: "int", nullable: false),
-                    staff_id = table.Column<int>(type: "int", nullable: false),
+                    Rent_date_From = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Rent_date_To = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Car_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Customer_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Staff_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rent_Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RentCar", x => x.Rent_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Staff",
+                columns: table => new
+                {
+                    Staff_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Staff_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Staff_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Staff_Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: true),
+                    Staff_Discount = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staff", x => x.Staff_Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -270,10 +308,16 @@ namespace Car_Rental_System.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Cars");
+
+            migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "RentCar");
+
+            migrationBuilder.DropTable(
+                name: "Staff");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

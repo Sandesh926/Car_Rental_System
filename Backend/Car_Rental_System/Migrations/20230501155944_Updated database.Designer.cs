@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_Rental_System.Migrations
 {
     [DbContext(typeof(CarsAPIDbContext))]
-    [Migration("20230429145719_add customer")]
-    partial class addcustomer
+    [Migration("20230501155944_Updated database")]
+    partial class Updateddatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,9 +43,8 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role_id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role_id")
+                        .HasColumnType("int");
 
                     b.HasKey("Admin_id");
 
@@ -74,6 +73,9 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Rent_Price")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -96,6 +98,9 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Customer_Document")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Customer_Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -112,9 +117,6 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Cutomer_Document")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<bool>("IsRegular")
                         .HasColumnType("bit");
 
@@ -128,8 +130,11 @@ namespace Car_Rental_System.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("RegularDiscount")
+                    b.Property<decimal?>("RegularDiscount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Role_id")
+                        .HasColumnType("int");
 
                     b.HasKey("Customer_Id");
 
@@ -142,25 +147,63 @@ namespace Car_Rental_System.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Car_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Customer_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Rent_Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Rent_date")
+                    b.Property<DateTime>("Rent_date_From")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("car_id")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Rent_date_To")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("customer_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("staff_id")
-                        .HasColumnType("int");
+                    b.Property<string>("Staff_id")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Rent_id");
 
                     b.ToTable("RentCar");
+                });
+
+            modelBuilder.Entity("Car_Rental_System.Models.Staff", b =>
+                {
+                    b.Property<Guid>("Staff_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Role_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Staff_Discount")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Staff_Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Staff_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Staff_Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Staff_Id");
+
+                    b.ToTable("Staff");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

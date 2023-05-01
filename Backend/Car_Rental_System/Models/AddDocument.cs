@@ -5,7 +5,7 @@
 
         public string Customer_Id { get; set; }
 
-        public byte[] Cutomer_Document { get; set; }
+        public string Cutomer_Document { get; set; }
 
     }
 }

@@ -19,7 +19,7 @@ namespace Car_Rental_System.Models
         [Required]
         public string Customer_Address { get; set; }
 
-        public byte[] Cutomer_Document { get; set; }
+        //public byte[] Cutomer_Document { get; set; }
         //public byte[]? Cutomer_Document { get; set; }
         //public string Password { get; set; }
 
