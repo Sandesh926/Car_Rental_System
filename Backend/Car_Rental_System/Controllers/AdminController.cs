@@ -76,7 +76,8 @@ namespace Car_Rental_System.Controllers
                 Email = admin.Admin_email,
                 Name = admin.Admin_name
             };
-            return Ok(admin);
+            //return Ok(admin);
+            return Ok(loginReply);
         }
 
 

@@ -75,10 +75,10 @@ namespace Car_Rental_System.Controllers
                 Token = tokenString,
                 Email = staff.Staff_Email,
                 Name = staff.Staff_Name
-
             };
 
-            return Ok(new { tokenString });
+            //return Ok(new { tokenString });
+            return Ok(loginReply);
         }
         //Getting the list of staff details
         [HttpGet]
@@ -87,6 +87,5 @@ namespace Car_Rental_System.Controllers
             // returing the list of staff in 200 response
             return Ok(await dbContext.Staff.ToListAsync());
         }
-
     }
 }
