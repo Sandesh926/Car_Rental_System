@@ -12,17 +12,20 @@ import {
   Paper,
   Table,
   TableHead,
-  TableRow
+  TableRow,
+  TableBody
 } from "@mui/material";
 
 import Iconify from "../components/iconify";
 import { Modal } from "antd";
-import { useRef} from "react";
+import { useRef, useEffect} from "react";
 
 export default function AdminPage() {
   const [open, setOpen] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [datas, setDatas] = useState([]);
 
   const handleCloseMenu = () => {
     setOpen(null);
@@ -71,6 +74,25 @@ export default function AdminPage() {
   const [adminPassword, setAdminPassword] = useState("");
   const [adminName, setAdminName] = useState("");
   const [roleId, setRoleId] = useState(0);
+
+  useEffect(() => {
+    fetch("https://localhost:7116/api/Admin", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDatas(data);
+        console.log(datas);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
 
   return (
@@ -153,11 +175,26 @@ export default function AdminPage() {
                     <TableCell>Admin ID</TableCell>
                     <TableCell align="right">Admin Name</TableCell>
                     <TableCell align="right">Admin Email</TableCell>
-                    <TableCell align="right">Admin Rating</TableCell>
-                    <TableCell align="right">Admin Password</TableCell>
                     <TableCell align="right">Role ID</TableCell>
                   </TableRow>
                 </TableHead>
+                <TableBody>
+                  {datas.map((data) => (
+                    <TableRow
+                      key={data.admin_id}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {data.admin_id}
+                      </TableCell>
+                      <TableCell align="right">{data.admin_name}</TableCell>
+                      <TableCell align="right">{data.admin_email}</TableCell>
+                      <TableCell align="right">{data.role_id}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
             </TableContainer>
         </Card>

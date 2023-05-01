@@ -16,6 +16,8 @@ import RentedCars from "./pages/RentedCars";
 import SalesPage from "./pages/SalesPage";
 import CarDamage from "./pages/CarDamage";
 import ReturnCar from "./pages/ReturnCar";
+import CustomerDetails from "./pages/CustomerDetails"
+import ChangePassword from "./pages/ChangePassword"
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +52,8 @@ export default function Router() {
         { path: 'trackcustomer', element: <TrackCustomer /> },
         { path: 'cardamage', element: <CarDamage /> },
         { path: 'returncars', element: <ReturnCar /> },
+        { path: 'customerdetails', element: <CustomerDetails /> },
+        { path: '/dashboard/changepassword', element: <ChangePassword /> },
       ],
     },
     {

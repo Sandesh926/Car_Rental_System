@@ -38,14 +38,14 @@ Nav.propTypes = {
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
 
-  const [adminRole, setAdminRole] = useState("");
+  // const [adminRole, setAdminRole] = useState("");
 
-  useEffect(() => {
-    const role = window.localStorage.getItem("role");
-    if (role === "admin") {
-      setAdminRole(role);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const role = window.localStorage.getItem("role");
+  //   if (role === "admin") {
+  //     setAdminRole(role);
+  //   }
+  // }, []);
 
   const data = window.localStorage.getItem("token");
   const obj = JSON.parse(data);
@@ -78,7 +78,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {adminRole ? obj.admin_name : obj.name}
+                {/* {adminRole ? obj.admin_name : obj.name} */}{obj.name}
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>

@@ -9,6 +9,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import PeopleIcon from '@mui/icons-material/People';
 import ToysIcon from '@mui/icons-material/Toys';
 import CarCrashIcon from '@mui/icons-material/CarCrash';
+import TableViewIcon from '@mui/icons-material/TableView';
 
 const navConfig = [
   {
@@ -25,6 +26,11 @@ const navConfig = [
     title: 'Add admin',
     path: '/dashboard/admin',
     icon: <AccountCircleIcon />,
+  },
+  {
+    title: 'Customer details',
+    path: '/dashboard/customerdetails',
+    icon: <TableViewIcon />,
   },
   {
     title: 'car inventory',

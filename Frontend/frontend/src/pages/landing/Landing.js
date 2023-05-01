@@ -10,10 +10,11 @@ import Car5 from "../../images/car5.jpg";
 import Car6 from "../../images/car6.jpg";
 import Car7 from "../../images/car7.webp";
 import Car8 from "../../images/car8.png";
-import Rev1 from "../../images/rev1.png";
 import About from "../../images/about.png";
 import Rev2 from "../../images/rev2.PNG";
 import Rev3 from "../../images/rev3.PNG";
+import Rev4 from "../../images/rev4.PNG";
+import Rev5 from "../../images/rev5.PNG";
 import { Link } from "react-router-dom";
 
 function Landing() {
@@ -245,7 +246,7 @@ function Landing() {
         <div className="reviews-container">
           <div className="box">
             <div className="rev-img">
-              <img src={Rev1} />
+              <img src={Rev5} />
             </div>
             <h2>Bijay Baniya</h2>
             <div className="stars">
@@ -291,6 +292,23 @@ function Landing() {
             </div>
             <p>
             Smooth and hassle-free car rental experience with reliable vehicles and helpful staff. Highly recommended.
+            </p>
+          </div>
+
+          <div className="box">
+            <div className="rev-img">
+              <img src={Rev4} />
+            </div>
+            <h2>Sayush Khadka</h2>
+            <div className="stars">
+              <i className="bx bxs-star"></i>
+              <i className="bx bxs-star"></i>
+              <i className="bx bxs-star"></i>
+              <i className="bx bxs-star"></i>
+              <i className="bx bxs-star-half"></i>
+            </div>
+            <p>
+            Hassle-free rental with reliable cars and helpful staff. Highly recommended!
             </p>
           </div>
         </div>
