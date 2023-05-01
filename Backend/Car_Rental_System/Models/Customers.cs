@@ -25,9 +25,9 @@ namespace Car_Rental_System.Models
         [Required]
         public string Customer_Address { get; set; }
         
-        public byte[] Cutomer_Document { get; set; }
-        public bool IsRegular { get; set; }
-        public decimal RegularDiscount { get; set; }
+        public byte[]? Customer_Document { get; set; }
+        public bool IsRegular { get; set; } = false;
+        public decimal? RegularDiscount { get; set; }
         public DateTime? LastRentalDate { get; set; }
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
 

@@ -71,7 +71,6 @@ namespace Car_Rental_System.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Image")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Rent_Price")
@@ -96,6 +95,9 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Customer_Document")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Customer_Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -112,10 +114,6 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Cutomer_Document")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<bool>("IsRegular")
                         .HasColumnType("bit");
 
@@ -129,7 +127,7 @@ namespace Car_Rental_System.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("RegularDiscount")
+                    b.Property<decimal?>("RegularDiscount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Role_id")
@@ -165,7 +163,6 @@ namespace Car_Rental_System.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Staff_id")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Rent_id");

@@ -40,7 +40,6 @@ namespace Car_Rental_System.Controllers
                 Rent_date_To = carRent.Rent_date_To,
                 Car_id = carRent.Car_id.ToString(),
                 Customer_id = customer.Customer_Id.ToString(),
-                Staff_id = carRent.Staff_id.ToString(),
                 Rent_Status = carRent.Rent_Status
                 
             };

@@ -103,7 +103,6 @@ namespace Car_Rental_System.Controllers
                 return NotFound("Customer not found.");
             }
 
-            // Convert the document file to a byte array
             byte[] documentData = null;
             using (var ms = new MemoryStream())
             {
@@ -112,11 +111,32 @@ namespace Car_Rental_System.Controllers
             }
 
             // Update the customer's document in the database
-            customer.Cutomer_Document = documentData;
+            customer.Customer_Document = documentData;
             await dbContext.SaveChangesAsync();
 
             return Ok("Document added successfully.");
         }
+
+
+        [HttpGet("{customerId}/document")]
+        public async Task<IActionResult> GetDocument(Guid customerId)
+        {
+            var customer = await dbContext.Customers.FindAsync(customerId);
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            if (customer.Customer_Document == null)
+            {
+                return NotFound("Document not found.");
+            }
+
+            var documentStream = new MemoryStream(customer.Customer_Document);
+            return File(documentStream, "application/octet-stream", "document.jpg");
+        }
+
+
 
         
 
