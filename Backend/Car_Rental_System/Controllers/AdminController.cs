@@ -94,5 +94,35 @@ namespace Car_Rental_System.Controllers
         }
 
 
+        //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //change password
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var adminId = getUserId.GetUserIdFromToken(tokenString);
+            var admin = await dbContext.Admin.FindAsync(Guid.Parse(adminId));
+            if (admin == null)
+            {
+                return NotFound("Admin not found.");
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(changePassword.OldPassword, admin.Admin_password))
+            {
+                return BadRequest("Invalid password.");
+            }
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(changePassword.NewPassword);
+            admin.Admin_password = hashedPassword;
+            await dbContext.SaveChangesAsync();
+            return Ok("Password changed successfully.");
+        }
+
+
     }
 }
