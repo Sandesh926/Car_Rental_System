@@ -206,7 +206,7 @@ namespace Car_Rental_System.Controllers
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //change password
         [HttpPut("changePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody] string NewPassword, [FromBody] string OldPassword)
+        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))
@@ -220,11 +220,11 @@ namespace Car_Rental_System.Controllers
                 return NotFound("Customer not found.");
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(OldPassword, customer.Password))
+            if (!BCrypt.Net.BCrypt.Verify(changePassword.OldPassword, customer.Password))
             {
                 return BadRequest("Invalid password.");
             }
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(NewPassword);
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(changePassword.NewPassword);
             customer.Password = hashedPassword;
             await dbContext.SaveChangesAsync();
             return Ok("Password changed successfully.");

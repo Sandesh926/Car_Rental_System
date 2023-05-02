@@ -36,7 +36,7 @@ namespace Car_Rental_System.Controllers
         [HttpGet]
         [Route("{car_id:guid}")]
         // Getting single car details
-        public async Task<IActionResult> GetCar([FromRoute] Guid car_id)
+        public async Task<IActionResult> GetCar(Guid car_id)
         {
             // It interacts with the database cars and find that car using id
             var car = await dbContext.Cars.FindAsync(car_id);
@@ -75,7 +75,7 @@ namespace Car_Rental_System.Controllers
         // Update car method
         [HttpPut]
         [Route("{car_id:guid}")]
-        public async Task<IActionResult> UpdateCar([FromRoute] Guid car_id, UpdateCarRequest updateCarRequest)
+        public async Task<IActionResult> UpdateCar(Guid car_id, UpdateCarRequest updateCarRequest)
         {
             var car = await dbContext.Cars.FindAsync(car_id);
             if (car != null)
@@ -96,7 +96,7 @@ namespace Car_Rental_System.Controllers
         [HttpDelete]
         [Route("{car_id:guid}")]
         // Delete Car Method
-        public async Task<IActionResult> DeleteCar([FromRoute] Guid car_id)
+        public async Task<IActionResult> DeleteCar(Guid car_id)
         {
            var car = await dbContext.Cars.FindAsync(car_id);
            if (car != null)
