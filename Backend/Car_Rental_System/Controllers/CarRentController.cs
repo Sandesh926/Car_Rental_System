@@ -63,7 +63,7 @@ namespace Car_Rental_System.Controllers
             if (customer != null)
             {
                 //find all customer damage record and see if there is any pending payment
-                var customerDamage = await dbContext.DamageCar.FirstOrDefaultAsync(c => c.customer_id.ToString() == customer.Customer_Id.ToString() && c.Charge_status != "Paid");
+                var customerDamage = await dbContext.DamageCar.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == customer.Customer_Id.ToString() && c.Charge_status != "Paid");
                 if (customerDamage!=null)
                 {
                     return BadRequest("Customer has pending damage payment.");
@@ -96,8 +96,8 @@ namespace Car_Rental_System.Controllers
                 Rent_date_From = carRent.Rent_date_From.ToDateTime(TimeOnly.MinValue),
                 Rent_date_To = carRent.Rent_date_To.ToDateTime(TimeOnly.MaxValue),
                 Car_id = Guid.Parse(carRent.Car_id),
-                Staff_id = Guid.Parse(staff_id),
-                Customer_id = Guid.Parse(customer_id),
+                Staff_Id = Guid.Parse(staff_id),
+                Customer_Id = Guid.Parse(customer_id),
                 Rent_Status = carRent.Rent_Status,
                 Discount = discount
             };
@@ -143,9 +143,9 @@ namespace Car_Rental_System.Controllers
                 Rent_date_To = r.Rent_date_To,
                 Car_id = r.Car_id,
                 Car_name = r.Car.Car_Name,
-                Customer_id = r.Customer_id,
+                Customer_id = r.Customer_Id,
                 Customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
-                Staff_id = r.Staff_id,
+                Staff_id = r.Staff_Id,
                 Staff_name = r.Staff.Staff_Name,
                 ApprovedBy = r.ApprovedBy,
                 Discount = r.Discount,
@@ -206,12 +206,12 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Staff does not exist in the database.");
             }
 
-            if (!carRentObj.Customer_id.ToString().IsNullOrEmpty())
+            if (!carRentObj.Customer_Id.ToString().IsNullOrEmpty())
             {
-                var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id == carRentObj.Customer_id);
+                var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id == carRentObj.Customer_Id);
                 customer.LastRentalDate = DateTime.Now;
                 //count if there are more than 3 rentals of car by this user in the last 3 months
-                var count = await dbContext.RentCar.Where(c => c.Customer_id == carRentObj.Customer_id && c.Rent_date_From >= DateTime.Now.AddMonths(-3)).CountAsync();
+                var count = await dbContext.RentCar.Where(c => c.Customer_Id == carRentObj.Customer_Id && c.Rent_date_From >= DateTime.Now.AddMonths(-3)).CountAsync();
                 if (count >= 3)
                 {
                     customer.IsRegular = true;
@@ -329,7 +329,7 @@ namespace Car_Rental_System.Controllers
                 .Include(r => r.Customer)
                 .Include(r => r.Staff)
                 .Include(r => r.Car)
-                .Where(r => r.Customer_id.ToString() == id || r.Staff_id.ToString() == id)
+                .Where(r => r.Customer_Id.ToString() == id || r.Staff_Id.ToString() == id)
                 .ToListAsync();
             var result = carRents.Select(r => new 
             {
@@ -338,9 +338,9 @@ namespace Car_Rental_System.Controllers
                 Rent_date_To = r.Rent_date_To,
                 Car_id = r.Car_id,
                 Car_name = r.Car.Car_Name,
-                Customer_id = r.Customer_id,
+                Customer_id = r.Customer_Id,
                 Customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
-                Staff_id = r.Staff_id,
+                Staff_id = r.Staff_Id,
                 Staff_name = r.Staff.Staff_Name,
                 ApprovedBy = r.ApprovedBy,
                 Discount = r.Discount,
