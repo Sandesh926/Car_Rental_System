@@ -12,15 +12,17 @@ namespace Car_Rental_System.Models
         public DateTime Rent_date_To { get; set; }
 
         [ForeignKey("Cars")]
-        public string Car_id { get; set; }
+        public Guid Car_id { get; set; }
+        public virtual Cars Car { get; set; }
 
         [ForeignKey("Customers")]
-        public string? Customer_id { get; set; }
+        public Guid? Customer_id { get; set; }
+        public virtual Customers Customer { get; set; }
 
         [ForeignKey("Staff")]
-        public string? Staff_id { get; set; }
+        public Guid? Staff_id { get; set; }
+        public virtual Staff Staff { get; set; } 
 
-        [ForeignKey("Staff")]
         public string? ApprovedBy { get; set; }
 
         public double? Discount { get; set; }

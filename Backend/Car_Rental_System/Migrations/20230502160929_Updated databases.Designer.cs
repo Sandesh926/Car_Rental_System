@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_Rental_System.Migrations
 {
     [DbContext(typeof(CarsAPIDbContext))]
-    [Migration("20230502110526_Updated databases")]
+    [Migration("20230502160929_Updated databases")]
     partial class Updateddatabases
     {
         /// <inheritdoc />
@@ -75,6 +75,9 @@ namespace Car_Rental_System.Migrations
 
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Rent_Price")
                         .IsRequired()
@@ -153,9 +156,15 @@ namespace Car_Rental_System.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("Car_id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Charge_status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Customer_Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("DamageCharge")
                         .HasColumnType("float");
@@ -163,18 +172,22 @@ namespace Car_Rental_System.Migrations
                     b.Property<DateTime>("DamageDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("car_id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("car_id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("customer_id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("customer_id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("staff_id")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("staff_id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Damage_id");
+
+                    b.HasIndex("Car_id");
+
+                    b.HasIndex("Customer_Id");
+
+                    b.HasIndex("staff_id");
 
                     b.ToTable("DamageCar");
                 });
@@ -188,12 +201,17 @@ namespace Car_Rental_System.Migrations
                     b.Property<string>("ApprovedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Car_id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("Car_id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Customer_id")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("Car_id1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Customer_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("Customer_id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("Discount")
                         .HasColumnType("float");
@@ -208,10 +226,16 @@ namespace Car_Rental_System.Migrations
                     b.Property<DateTime>("Rent_date_To")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Staff_id")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("Staff_id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Rent_id");
+
+                    b.HasIndex("Car_id1");
+
+                    b.HasIndex("Customer_Id");
+
+                    b.HasIndex("Staff_id");
 
                     b.ToTable("RentCar");
                 });
@@ -445,6 +469,56 @@ namespace Car_Rental_System.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Car_Rental_System.Models.DamageCar", b =>
+                {
+                    b.HasOne("Car_Rental_System.Models.Cars", "Car")
+                        .WithMany()
+                        .HasForeignKey("Car_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car_Rental_System.Models.Customers", "Customer")
+                        .WithMany()
+                        .HasForeignKey("Customer_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car_Rental_System.Models.Staff", "Staff")
+                        .WithMany()
+                        .HasForeignKey("staff_id");
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("Car_Rental_System.Models.RentCar", b =>
+                {
+                    b.HasOne("Car_Rental_System.Models.Cars", "Car")
+                        .WithMany()
+                        .HasForeignKey("Car_id1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car_Rental_System.Models.Customers", "Customer")
+                        .WithMany()
+                        .HasForeignKey("Customer_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Car_Rental_System.Models.Staff", "Staff")
+                        .WithMany()
+                        .HasForeignKey("Staff_id");
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

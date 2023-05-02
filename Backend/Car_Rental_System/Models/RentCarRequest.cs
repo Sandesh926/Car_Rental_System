@@ -5,9 +5,9 @@ namespace Car_Rental_System.Models
 {
     public class RentCarRequest
     {
-        public DateTime Rent_date_From { get; set; }
+        public DateOnly Rent_date_From { get; set; }
 
-        public DateTime Rent_date_To { get; set; }
+        public DateOnly Rent_date_To { get; set; }
 
         public string Car_id { get; set; }
 
