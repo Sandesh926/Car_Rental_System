@@ -19,13 +19,14 @@ namespace Car_Rental_System.Controllers
 
         private readonly CarsAPIDbContext dbContext;
 
-
         //create object for GetUserId
-        private readonly GetUserId _getUserId;
+        private GetUserId getUserId;
 
-        public DamageCarController(CarsAPIDbContext dbContext)
+        // Creating a constructor and injecting the dbcontext
+        public DamageCarController(CarsAPIDbContext dbContext, GetUserId getUserId)
         {
             this.dbContext = dbContext;
+            this.getUserId = getUserId;
         }
 
         //post damage car to database
@@ -136,7 +137,7 @@ namespace Car_Rental_System.Controllers
         public async Task<IActionResult> GetDamageCarsByCustomer()
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var id = _getUserId.GetUserIdFromToken(tokenString);
+            var id = getUserId.GetUserIdFromToken(tokenString);
 
             var damageCars = await dbContext.DamageCar.Where(c => c.customer_id == id).ToListAsync();
             if (damageCars == null)

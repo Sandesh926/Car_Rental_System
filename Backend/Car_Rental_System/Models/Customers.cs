@@ -26,6 +26,8 @@ namespace Car_Rental_System.Models
         public string Customer_Address { get; set; }
         
         public byte[]? Customer_Document { get; set; }
+
+        public string? Document_Type { get; set; }
         public bool IsRegular { get; set; } = false;
         public double? RegularDiscount { get; set; }
         public DateTime? LastRentalDate { get; set; }

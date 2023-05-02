@@ -114,6 +114,9 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Document_Type")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsRegular")
                         .HasColumnType("bit");
 

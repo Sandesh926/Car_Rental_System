@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Car_Rental_System.Migrations
 {
     /// <inheritdoc />
-    public partial class Updateddatabase : Migration
+    public partial class Updateddatabases : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -95,6 +95,7 @@ namespace Car_Rental_System.Migrations
                     Customer_Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Customer_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Customer_Document = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Document_Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsRegular = table.Column<bool>(type: "bit", nullable: false),
                     RegularDiscount = table.Column<double>(type: "float", nullable: true),
                     LastRentalDate = table.Column<DateTime>(type: "datetime2", nullable: true),

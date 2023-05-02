@@ -18,11 +18,13 @@ namespace Car_Rental_System.Controllers
         private readonly CarsAPIDbContext dbContext;
 
         //create object for GetUserId
-        private readonly GetUserId _getUserId;
+        private GetUserId getUserId;
 
-        public StaffController(CarsAPIDbContext dbContext)
+        // Creating a constructor and injecting the dbcontext
+        public StaffController(CarsAPIDbContext dbContext, GetUserId getUserId)
         {
             this.dbContext = dbContext;
+            this.getUserId = getUserId;
         }
 
         [HttpPost]
@@ -52,7 +54,7 @@ namespace Car_Rental_System.Controllers
             var staff = await dbContext.Staff.FirstOrDefaultAsync(s => s.Staff_Email == loginStaff.Email);
             if (staff == null)
             {
-                return BadRequest("Invalid Credentials");
+                return BadRequest("Staff not found");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(loginStaff.Password, staff.Staff_Password))
