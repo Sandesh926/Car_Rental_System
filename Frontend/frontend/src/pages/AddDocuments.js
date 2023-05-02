@@ -8,6 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import License from "../images/Driving License.png"
 
 export default function AddDocuments() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -75,7 +76,7 @@ export default function AddDocuments() {
           </form>
         </Card>
         <Card style={{ padding: "20px", marginTop: "30px" }}>
-          No Data!
+          <img src={License} style={{height: "20vw"}} />
         </Card>
       </Container>
     </>

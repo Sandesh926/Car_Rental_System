@@ -1,14 +1,27 @@
 import { Helmet } from "react-helmet-async";
-import { Container, Typography } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Table,
+  TableContainer,
+  TableHead,
+  Paper,
+  TableCell,
+  TableRow,
+  TableBody,
+} from "@mui/material";
 import { Card, Col, Row } from "antd";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 
 export default function DashboardAppPage() {
-
   const [totalCars, setTotalCars] = useState(0);
+  const [totalRents, setTotalRents] = useState(0);
+  const [pendingRents, setPendingRent] = useState(0);
+  const [frequently, setFrequently] = useState([]);
+  const [never, setNever] = useState([])
 
   useEffect(() => {
-    fetch("https://localhost:7116/api/totalcars", {
+    fetch("https://localhost:7116/api/Dashboard/totalcars", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -18,12 +31,70 @@ export default function DashboardAppPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        setTotalCars(data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    fetch("https://localhost:7116/api/Dashboard/totalrents", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTotalRents(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("https://localhost:7116/api/Dashboard/paidrents", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPendingRent(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("https://localhost:7116/frequentlyRented", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFrequently(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+
+
+  console.log(totalCars);
 
   return (
     <>
@@ -39,20 +110,55 @@ export default function DashboardAppPage() {
         <Row gutter={16}>
           <Col span={8}>
             <Card title="Total Cars" bordered={false}>
-              8
+              {totalCars}
             </Card>
           </Col>
           <Col span={8}>
             <Card title="Total Rents" bordered={false}>
-              3
+              {totalRents}
             </Card>
           </Col>
           <Col span={8}>
             <Card title="Pending Rents" bordered={false}>
-              2
+              {pendingRents}
             </Card>
           </Col>
         </Row>
+
+        <Typography variant="h6" sx={{ mt: 5 }}>
+          Frequently Rented Cars
+        </Typography>
+        <TableContainer component={Paper} sx={{ mt: 3 }}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="right">Car Name</TableCell>
+                <TableCell align="right">Car Model</TableCell>
+                <TableCell align="right">Year</TableCell>
+                <TableCell align="right">Color</TableCell>
+                <TableCell align="right">Rent Price</TableCell>
+                <TableCell align="right">Availability Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {frequently.map((data) => (
+                <TableRow
+                  key={data.rent_id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
+                >
+                  <TableCell align="right">{data.car_Name}</TableCell>
+                  <TableCell align="right">{data.car_Model}</TableCell>
+                  <TableCell align="right">{data.year}</TableCell>
+                  <TableCell align="right">{data.color}</TableCell>
+                  <TableCell align="right">{data.rent_Price}</TableCell>
+                  <TableCell align="right">{data.availability_Status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </>
   );

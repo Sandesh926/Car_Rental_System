@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Button, Container, Stack, Typography } from '@mui/material';
+import { Button, Container, Stack, Typography, Table, TableHead, TableRow, TableCell, TableContainer, Paper } from '@mui/material';
 import Iconify from '../components/iconify'
 
 export default function RentedCars() {
@@ -15,7 +15,20 @@ export default function RentedCars() {
             Total Sales
           </Typography>
         </Stack>
-        <h1>This is a sales page.</h1>
+        <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Sales ID</TableCell>
+                    <TableCell align="right"></TableCell>
+                    <TableCell align="right">Car Name</TableCell>
+                    <TableCell align="right">Car Model</TableCell>
+                    <TableCell align="right">Total Sales</TableCell>
+                    <TableCell align="right">Customer Name</TableCell>
+                  </TableRow>
+                </TableHead>
+              </Table>
+            </TableContainer>
       </Container>
     </>
   );

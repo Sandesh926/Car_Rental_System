@@ -60,6 +60,8 @@ export default function RentCars() {
 
   const useType = window.localStorage.getItem("role");
 
+  const isStaff = window.localStorage.getItem("staffloggedIn");
+
   const [carID, setCarID] = useState("");
 
   console.log(startDate)
