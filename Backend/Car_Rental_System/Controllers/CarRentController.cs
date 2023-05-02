@@ -52,6 +52,12 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Car does not exist in the database.");
             }
 
+            //check if car is available
+            if (car.Availability_Status == "Rented")
+            {
+                return BadRequest("Car is already rented.");
+            }
+
             double discount = car.discount;
 
             if (customer != null)
@@ -60,7 +66,7 @@ namespace Car_Rental_System.Controllers
                 {
                     return BadRequest("Customer has not added their document yet.");
                 }
-                carRent.User_Type = "Customer";
+                carRent.User_Type = "customer";
                 customer_id = customer.Customer_Id.ToString();
                 if (customer.IsRegular)
                 {
@@ -69,7 +75,7 @@ namespace Car_Rental_System.Controllers
             }
             else if (staff != null)
             {
-                carRent.User_Type = "Staff";
+                carRent.User_Type = "staff";
                 staff_id = staff.Staff_Id.ToString();
                 discount = discount + 0.25;
             }
@@ -93,6 +99,22 @@ namespace Car_Rental_System.Controllers
             return Ok(carRentObj);
 
 
+        }
+
+
+
+        //cancel car rent
+        [HttpPut("{id}")]
+        public async Task<IActionResult> CancelCarRent(string id)
+        {
+            var carRent = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == id);
+            if (carRent == null)
+            {
+                return NotFound();
+            }
+            carRent.Rent_Status = "Cancelled";
+            await dbContext.SaveChangesAsync();
+            return Ok(carRent);
         }
 
 
@@ -130,6 +152,14 @@ namespace Car_Rental_System.Controllers
         [HttpPut("/accept/{car_id}")]
         public async Task<IActionResult> AcceptCarRent(string car_id)
         {
+
+            //check if current time is between 9am and 5pm
+            var time = DateTime.Now;
+            if (time.Hour <= 9 || time.Hour >= 17)
+            {
+                return BadRequest("This operation can only be done between 9am to 5pm.");
+            }
+
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))
             {
@@ -144,9 +174,32 @@ namespace Car_Rental_System.Controllers
             }
             var staff = await dbContext.Staff.FirstOrDefaultAsync(c => c.Staff_Id.ToString() == staff_id);
             if (staff == null)
-            {
+            {   
                 return BadRequest("Staff does not exist in the database.");
             }
+
+            if (!carRentObj.Customer_id.IsNullOrEmpty())
+            {
+                var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == carRentObj.Customer_id);
+                customer.LastRentalDate = DateTime.Now;
+                //count if there are more than 3 rentals of car by this user in the last 3 months
+                var count = await dbContext.RentCar.Where(c => c.Customer_id == carRentObj.Customer_id && c.Rent_date_From >= DateTime.Now.AddMonths(-3)).CountAsync();
+                if (count >= 3)
+                {
+                    customer.IsRegular = true;
+                    
+                }
+                else
+                {
+                    customer.IsRegular = false;
+                    
+                }
+                await dbContext.SaveChangesAsync();
+            }
+
+            //change car status to rented
+            var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRentObj.Car_id);
+            car.Availability_Status = "Rented";
             carRentObj.ApprovedBy = staff_id;
             carRentObj.Rent_Status = "Accepted";
             await dbContext.SaveChangesAsync();
@@ -163,6 +216,11 @@ namespace Car_Rental_System.Controllers
         [HttpPut("/reject/{car_id}")]
         public async Task<IActionResult> RejectCarRent(string car_id)
         {
+            var time = DateTime.Now;
+            if (time.Hour <= 9 || time.Hour >= 17)
+            {
+                return BadRequest("This operation can only be done between 9am to 5pm.");
+            }
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))
             {
@@ -184,6 +242,92 @@ namespace Car_Rental_System.Controllers
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
         }
+
+
+        //make rent status to paid
+        [HttpPut("/pay/{car_id}")]
+        public async Task<IActionResult> PayCarRent(string car_id)
+        {
+            var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
+            if (carRentObj == null)
+            {
+                return NotFound();
+            }
+            carRentObj.Rent_Status = "Paid";
+            await dbContext.SaveChangesAsync();
+            return Ok(carRentObj);
+        }
+
+
+        //make rent status to returned
+        [HttpPut("/return/{car_id}")]
+        public async Task<IActionResult> ReturnCarRent(string car_id)
+        {
+            var time = DateTime.Now;
+            if (time.Hour <= 9 || time.Hour >= 17)
+            {
+                return BadRequest("This operation can only be done between 9am to 5pm.");
+            }
+            var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
+            if (carRentObj == null)
+            {
+                return NotFound();
+            }
+            carRentObj.Rent_Status = "Returned";
+            //set car status to available
+            var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRentObj.Car_id);
+            car.Availability_Status = "Available";
+            await dbContext.SaveChangesAsync();
+            return Ok(carRentObj);
+        }
+
+
+
+
+        //check your car rents
+        //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        [HttpGet("/myrents")]
+        public async Task<IActionResult> GetMyCarRents()
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var id = getUserId.GetUserIdFromToken(tokenString);
+            var carRents = await dbContext.RentCar.Where(c => c.Customer_id == id).ToListAsync();
+            if (carRents.Count<1)
+            {
+                carRents = await dbContext.RentCar.Where(c => c.Staff_id == id).ToListAsync();
+            }
+            return Ok(carRents);
+        }
+
+
+
+        //show frequently rented cars
+        [HttpGet("/frequent")]
+        public async Task<IActionResult> GetFrequentRentedCars()
+        {
+            var cars = await dbContext.Cars.ToListAsync();
+            var carRents = await dbContext.RentCar.ToListAsync();
+            var carRentsGrouped = carRents.GroupBy(c => c.Car_id).ToList();
+            var carRentsGroupedSorted = carRentsGrouped.OrderByDescending(c => c.Count()).ToList();
+            var carRentsGroupedSortedIds = carRentsGroupedSorted.Select(c => c.Key).ToList();
+            var carRentsGroupedSortedIdsCars = new List<Cars>();
+            foreach (var id in carRentsGroupedSortedIds)
+            {
+                var car = cars.FirstOrDefault(c => c.Car_id.ToString() == id);
+                carRentsGroupedSortedIdsCars.Add(car);
+            }
+            return Ok(carRentsGroupedSortedIdsCars);
+        }
+
+
+
+
 
 
         
