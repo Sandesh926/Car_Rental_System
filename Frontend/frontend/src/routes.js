@@ -16,8 +16,10 @@ import RentedCars from "./pages/RentedCars";
 import SalesPage from "./pages/SalesPage";
 import CarDamage from "./pages/CarDamage";
 import ReturnCar from "./pages/ReturnCar";
-import CustomerDetails from "./pages/CustomerDetails"
-import ChangePassword from "./pages/ChangePassword"
+import CustomerDetails from "./pages/CustomerDetails";
+import ChangePassword from "./pages/ChangePassword";
+import AddDocument from "./pages/AddDocuments";
+import DamageRequest from "./pages/DamageRequest"
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +56,8 @@ export default function Router() {
         { path: 'returncars', element: <ReturnCar /> },
         { path: 'customerdetails', element: <CustomerDetails /> },
         { path: '/dashboard/changepassword', element: <ChangePassword /> },
+        { path: '/dashboard/adddocument', element: <AddDocument /> },
+        { path: 'damagerequest', element: <DamageRequest /> },
       ],
     },
     {
