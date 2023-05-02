@@ -19,6 +19,10 @@ namespace Car_Rental_System.Controllers
 
         private readonly CarsAPIDbContext dbContext;
 
+
+        //create object for GetUserId
+        private readonly GetUserId _getUserId;
+
         public DamageCarController(CarsAPIDbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -132,7 +136,7 @@ namespace Car_Rental_System.Controllers
         public async Task<IActionResult> GetDamageCarsByCustomer()
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var id = GetUserIdFromToken(tokenString);
+            var id = _getUserId.GetUserIdFromToken(tokenString);
 
             var damageCars = await dbContext.DamageCar.Where(c => c.customer_id == id).ToListAsync();
             if (damageCars == null)
@@ -143,25 +147,6 @@ namespace Car_Rental_System.Controllers
         }
 
 
-        //get user id from token
-        private string GetUserIdFromToken(string tokenString)
-        {
-            // Verify and decode the token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("AShfhajfsgahbfjhbashj.asd@shajfhjas");
-            SecurityToken validatedToken;
-            var claims = tokenHandler.ValidateToken(tokenString, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            }, out validatedToken);
-    
-            // Get the user id from the token's payload
-            var userId = claims.FindFirst(ClaimTypes.Name)?.Value;
-            return userId;
-        }
 
 
 

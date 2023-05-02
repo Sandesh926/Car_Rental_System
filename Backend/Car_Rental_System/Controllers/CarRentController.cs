@@ -17,6 +17,9 @@ namespace Car_Rental_System.Controllers
 
         private readonly CarsAPIDbContext dbContext;
 
+        //create object for GetUserId
+        private readonly GetUserId _getUserId;
+
         public CarRentController(CarsAPIDbContext dbContext)
         {
             this.dbContext = dbContext;
@@ -29,7 +32,11 @@ namespace Car_Rental_System.Controllers
         {
 
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var userID = GetUserIdFromToken(tokenString);
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var userID = _getUserId.GetUserIdFromToken(tokenString);
             var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == userID);
             var staff = await dbContext.Staff.FirstOrDefaultAsync(c => c.Staff_Id.ToString() == userID);
 
@@ -90,6 +97,9 @@ namespace Car_Rental_System.Controllers
             return Ok(carRents);
         }
 
+
+
+
         //Get car rent by id from database
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCarRentById(string id)
@@ -102,6 +112,9 @@ namespace Car_Rental_System.Controllers
             return Ok(carRent);
         }
 
+
+
+
         //Add staff name and change rent status to rented
         //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
@@ -110,7 +123,11 @@ namespace Car_Rental_System.Controllers
         public async Task<IActionResult> AcceptCarRent(string car_id)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var staff_id = GetUserIdFromToken(tokenString);
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var staff_id = _getUserId.GetUserIdFromToken(tokenString);
 
             var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
             if (carRentObj == null)
@@ -128,6 +145,9 @@ namespace Car_Rental_System.Controllers
             return Ok(carRentObj);
         }
 
+
+
+
         //Change rent status to rejected
         //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
@@ -136,7 +156,11 @@ namespace Car_Rental_System.Controllers
         public async Task<IActionResult> RejectCarRent(string car_id)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var staff_id = GetUserIdFromToken(tokenString);
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var staff_id = _getUserId.GetUserIdFromToken(tokenString);
             var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
             if (carRentObj == null)
             {
@@ -153,29 +177,6 @@ namespace Car_Rental_System.Controllers
             return Ok(carRentObj);
         }
 
-
-        //get user id from token
-        private string GetUserIdFromToken(string tokenString)
-        {
-            // Verify and decode the token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("AShfhajfsgahbfjhbashj.asd@shajfhjas");
-            SecurityToken validatedToken;
-            var claims = tokenHandler.ValidateToken(tokenString, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            }, out validatedToken);
-    
-            // Get the user id from the token's payload
-            var userId = claims.FindFirst(ClaimTypes.Name)?.Value;
-            return userId;
-        }
-
-
-        
 
         
     }

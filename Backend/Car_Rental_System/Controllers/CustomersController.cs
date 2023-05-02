@@ -18,6 +18,9 @@ namespace Car_Rental_System.Controllers
         // this is used to talk to in-memory database
         private readonly CarsAPIDbContext dbContext;
 
+        //create object for GetUserId
+        private readonly GetUserId _getUserId;
+
         // Creating a constructor and injecting the dbcontext
         public CustomersController(CarsAPIDbContext dbContext)
         {
@@ -94,9 +97,17 @@ namespace Car_Rental_System.Controllers
 
 
         //upload image for customer
-        [HttpPost("{customerId}/document")]
-        public async Task<IActionResult> AddDocument(Guid customerId, IFormFile documentFile)
+        [HttpPost("document")]
+        public async Task<IActionResult> AddDocument(IFormFile documentFile)
         {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var customerId = _getUserId.GetUserIdFromToken(tokenString);
+
+
             var customer = await dbContext.Customers.FindAsync(customerId);
             if (customer == null)
             {
@@ -115,6 +126,30 @@ namespace Car_Rental_System.Controllers
             await dbContext.SaveChangesAsync();
 
             return Ok("Document added successfully.");
+        }
+
+        //get own document
+        [HttpGet("document")]
+        public async Task<IActionResult> GetOwnDocument()
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var customerId = _getUserId.GetUserIdFromToken(tokenString);
+            var customer = await dbContext.Customers.FindAsync(customerId);
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            if (customer.Customer_Document == null)
+            {
+                return NotFound("Document not found.");
+            }
+            var documentStream = new MemoryStream(customer.Customer_Document);
+            return File(documentStream, "application/octet-stream", "document.jpg");
         }
 
 
@@ -143,6 +178,33 @@ namespace Car_Rental_System.Controllers
         {
             var customers = await dbContext.Customers.ToListAsync();
             return Ok(customers);
+        }
+
+
+        //change password
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePassword(string NewPassword, string OldPassword)
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var customerId = _getUserId.GetUserIdFromToken(tokenString);
+            var customer = await dbContext.Customers.FindAsync(customerId);
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(OldPassword, customer.Password))
+            {
+                return BadRequest("Invalid password.");
+            }
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(NewPassword);
+            customer.Password = hashedPassword;
+            await dbContext.SaveChangesAsync();
+            return Ok("Password changed successfully.");
         }
 
         

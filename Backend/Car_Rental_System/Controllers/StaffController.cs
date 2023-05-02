@@ -17,6 +17,9 @@ namespace Car_Rental_System.Controllers
 
         private readonly CarsAPIDbContext dbContext;
 
+        //create object for GetUserId
+        private readonly GetUserId _getUserId;
+
         public StaffController(CarsAPIDbContext dbContext)
         {
             this.dbContext = dbContext;
