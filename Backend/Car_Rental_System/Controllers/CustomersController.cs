@@ -206,7 +206,7 @@ namespace Car_Rental_System.Controllers
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //change password
         [HttpPut("changePassword")]
-        public async Task<IActionResult> ChangePassword(string NewPassword, string OldPassword)
+        public async Task<IActionResult> ChangePassword([FromBody] string NewPassword, [FromBody] string OldPassword)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))

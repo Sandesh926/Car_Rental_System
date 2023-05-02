@@ -44,7 +44,7 @@ namespace Car_Rental_System.Controllers
 
             string customer_id = "";
             string staff_id = "";
-            double discount = 0;
+            
             //find car by id
             var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRent.Car_id);
             if (car == null)
@@ -52,20 +52,26 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Car does not exist in the database.");
             }
 
+            double discount = car.discount;
+
             if (customer != null)
             {
+                if (customer.Customer_Document.IsNullOrEmpty())
+                {
+                    return BadRequest("Customer has not added their document yet.");
+                }
                 carRent.User_Type = "Customer";
                 customer_id = customer.Customer_Id.ToString();
                 if (customer.IsRegular)
                 {
-                    discount = 0.1;
+                    discount = discount + 0.1;
                 }
             }
             else if (staff != null)
             {
                 carRent.User_Type = "Staff";
                 staff_id = staff.Staff_Id.ToString();
-                discount = 0.25;
+                discount = discount + 0.25;
             }
             else
             {
@@ -122,7 +128,7 @@ namespace Car_Rental_System.Controllers
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         [HttpPut("/accept")]
-        public async Task<IActionResult> AcceptCarRent(string car_id)
+        public async Task<IActionResult> AcceptCarRent([FromBody] string car_id)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))
@@ -155,7 +161,7 @@ namespace Car_Rental_System.Controllers
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         [HttpPut("/reject")]
-        public async Task<IActionResult> RejectCarRent(string car_id)
+        public async Task<IActionResult> RejectCarRent([FromBody] string car_id)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))

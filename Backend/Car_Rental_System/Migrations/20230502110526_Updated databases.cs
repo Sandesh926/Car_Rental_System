@@ -76,7 +76,8 @@ namespace Car_Rental_System.Migrations
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rent_Price = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Availability_Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    discount = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
