@@ -54,6 +54,10 @@ namespace Car_Rental_System.Controllers
 
             if (customer != null)
             {
+                if (customer.Customer_Document.IsNullOrEmpty())
+                {
+                    return BadRequest("Customer has not added their document yet.");
+                }
                 carRent.User_Type = "Customer";
                 customer_id = customer.Customer_Id.ToString();
                 if (customer.IsRegular)
