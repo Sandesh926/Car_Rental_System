@@ -62,7 +62,8 @@ namespace Car_Rental_System.Controllers
                 Year = addCarRequest.Year,
                 Color = addCarRequest.Color,
                 Rent_Price = addCarRequest.Rent_Price,
-                Availability_Status = addCarRequest.Availability_Status
+                Availability_Status = addCarRequest.Availability_Status,
+                ImageLink = addCarRequest.ImageLink
             };
 
             await dbContext.Cars.AddAsync(car);
@@ -86,6 +87,7 @@ namespace Car_Rental_System.Controllers
                 car.Color = updateCarRequest.Color;
                 car.Rent_Price = updateCarRequest.Rent_Price;
                 car.Availability_Status = updateCarRequest.Availability_Status;
+                car.ImageLink = updateCarRequest.ImageLink;
 
                 await dbContext.SaveChangesAsync();
                 return Ok(car);
@@ -133,6 +135,26 @@ namespace Car_Rental_System.Controllers
             return Ok("Image added successfully.");
         }
 
+
+        [HttpGet("{carId}/document")]
+        public async Task<IActionResult> GetDocument(Guid carId)
+        {
+            var car = await dbContext.Cars.FindAsync(carId);
+            if (car == null)
+            {
+                return NotFound("Car not found.");
+            }
+
+            if (car.Image == null)
+            {
+                return NotFound("Image not found.");
+            }
+
+            var documentStream = new MemoryStream(car.Image);
+            return File(documentStream, "application/octet-stream", $"{car.Car_Name}.png");
+        }
+
+
         //add discount to car
         [HttpPut("addDiscount")]
         public async Task<IActionResult> AddDiscount(double discount, string carId)
@@ -146,5 +168,27 @@ namespace Car_Rental_System.Controllers
             await dbContext.SaveChangesAsync();
             return Ok("Discount added successfully.");
         }
+
+
+
+
+
+
+        //get currently rented cars
+        [HttpGet("/rented")]
+        public async Task<IActionResult> GetRentedCars()
+        {
+            var carRents = await dbContext.Cars.Where(c => c.Availability_Status == "Rented").ToListAsync();
+            return Ok(carRents);
+        }
+
+        //get currently available cars
+        [HttpGet("/available")]
+        public async Task<IActionResult> GetAvailableCars()
+        {
+            var carRents = await dbContext.Cars.Where(c => c.Availability_Status == "Available").ToListAsync();
+            return Ok(carRents);
+        }
+
     }
 }

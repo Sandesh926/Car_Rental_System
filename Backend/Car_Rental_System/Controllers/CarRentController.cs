@@ -306,6 +306,30 @@ namespace Car_Rental_System.Controllers
         }
 
 
+
+        //show frequently rented cars
+        [HttpGet("/frequent")]
+        public async Task<IActionResult> GetFrequentRentedCars()
+        {
+            var cars = await dbContext.Cars.ToListAsync();
+            var carRents = await dbContext.RentCar.ToListAsync();
+            var carRentsGrouped = carRents.GroupBy(c => c.Car_id).ToList();
+            var carRentsGroupedSorted = carRentsGrouped.OrderByDescending(c => c.Count()).ToList();
+            var carRentsGroupedSortedIds = carRentsGroupedSorted.Select(c => c.Key).ToList();
+            var carRentsGroupedSortedIdsCars = new List<Cars>();
+            foreach (var id in carRentsGroupedSortedIds)
+            {
+                var car = cars.FirstOrDefault(c => c.Car_id.ToString() == id);
+                carRentsGroupedSortedIdsCars.Add(car);
+            }
+            return Ok(carRentsGroupedSortedIdsCars);
+        }
+
+
+
+
+
+
         
     }
 }
