@@ -15,6 +15,7 @@ export default function CarInventory() {
   const [color, setColor] = useState("");
   const [rentPrice, setRentPrice] = useState("");
   const [availabilityStauts, setAvailabilityStatus] = useState("");
+  const [imageLink, setImageLink] = useState("")
   
   const [datas, setDatas] = useState([])
 
@@ -37,7 +38,8 @@ export default function CarInventory() {
           year,
           color,
           rent_Price: rentPrice,
-          availability_Status: availabilityStauts
+          // availability_Status: availabilityStauts,
+          imageLink
         }),
       })
         .then((res) => res.json())
@@ -129,7 +131,6 @@ export default function CarInventory() {
               id="year"
               label="Year"
               variant="outlined"
-              type = "password"
               style={{marginTop: "1vw", marginRight: "1vw"}}
               onChange={(e) => setYear(e.target.value)}
             />
@@ -147,12 +148,19 @@ export default function CarInventory() {
               style={{marginTop: "1vw", marginRight: "1vw"}}
               onChange={(e) => setRentPrice(e.target.value)}
             />
-            <TextField
+            {/* <TextField
               id="availability-status"
               label="Availability Status"
               variant="outlined"
               style={{marginTop: "1vw"}}
               onChange={(e) => setAvailabilityStatus(e.target.value)}
+            /> */}
+            <TextField
+              id="image-link"
+              label="Image Link"
+              variant="outlined"
+              style={{marginTop: "1vw"}}
+              onChange={(e) => setImageLink(e.target.value)}
             />
           </form>
           </Modal>
@@ -189,7 +197,7 @@ export default function CarInventory() {
                       <TableCell align="right">{data.color}</TableCell>
                       <TableCell align="right">Rs. {data.rent_Price}</TableCell>
                       <TableCell align="right">{data.availability_Status}</TableCell>
-                      <TableCell align="right"><button class="btn btn-danger btn-sm" onClick={() => handleDelete(data.car_id)}>Delete</button></TableCell>
+                      <TableCell align="right"><button class="btn btn-primary btn-sm" style={{marginRight: "1vw"}}>Edit</button><button class="btn btn-danger btn-sm" onClick={() => handleDelete(data.car_id)}>Delete</button></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

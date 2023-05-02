@@ -11,6 +11,7 @@ import ToysIcon from '@mui/icons-material/Toys';
 import CarCrashIcon from '@mui/icons-material/CarCrash';
 import TableViewIcon from '@mui/icons-material/TableView';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import CarRentalIcon from '@mui/icons-material/CarRental';
 
 const navConfig = [
   {
@@ -62,6 +63,11 @@ const navConfig = [
     title: 'car damage',
     path: '/dashboard/cardamage',
     icon: <CarCrashIcon />,
+  },
+  {
+    title: 'rent cars',
+    path: '/dashboard/rentcars',
+    icon: <CarRentalIcon />,
   },
   {
     title: 'damage request form',
