@@ -65,9 +65,9 @@ namespace Car_Rental_System.Controllers
                 var damageCarObj = new DamageCar()
                 {
                     Damage_id = Guid.NewGuid(),
-                    car_id = Guid.Parse(damageCar.car_id),
+                    Car_id = Guid.Parse(damageCar.car_id),
                     DamageDate = damageCar.DamageDate,
-                    customer_id = Guid.Parse(userId) // Assign the user id to the damage car object
+                    Customer_Id = Guid.Parse(userId) // Assign the user id to the damage car object
                 };
                 await dbContext.DamageCar.AddAsync(damageCarObj);
                 await dbContext.SaveChangesAsync();
@@ -113,7 +113,7 @@ namespace Car_Rental_System.Controllers
                 }
                 
                 damageCar.DamageCharge = fineCar.Fine_Amount;
-                damageCar.staff_id = Guid.Parse(userId);
+                damageCar.Staff_Id = Guid.Parse(userId);
                 damageCar.Charge_status = "Pending";
                 await dbContext.SaveChangesAsync();
 
@@ -139,7 +139,7 @@ namespace Car_Rental_System.Controllers
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var id = getUserId.GetUserIdFromToken(tokenString);
 
-            var damageCars = await dbContext.DamageCar.Where(c => c.customer_id.ToString() == id).ToListAsync();
+            var damageCars = await dbContext.DamageCar.Where(c => c.Customer_Id.ToString() == id).ToListAsync();
             if (damageCars == null)
             {
                 return BadRequest("No damage cars found for this customer.");

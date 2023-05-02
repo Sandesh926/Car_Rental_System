@@ -16,11 +16,11 @@ namespace Car_Rental_System.Models
         public virtual Cars Car { get; set; }
 
         [ForeignKey("Customers")]
-        public Guid? Customer_id { get; set; }
+        public Guid? Customer_Id { get; set; }
         public virtual Customers Customer { get; set; }
 
         [ForeignKey("Staff")]
-        public Guid? Staff_id { get; set; }
+        public Guid? Staff_Id { get; set; }
         public virtual Staff Staff { get; set; } 
 
         public string? ApprovedBy { get; set; }
