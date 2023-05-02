@@ -132,5 +132,19 @@ namespace Car_Rental_System.Controllers
 
             return Ok("Image added successfully.");
         }
+
+        //add discount to car
+        [HttpPut("addDiscount")]
+        public async Task<IActionResult> AddDiscount(decimal discount, string carId)
+        {
+            var car = await dbContext.Cars.FindAsync(Guid.Parse(carId));
+            if (car == null)
+            {
+                return NotFound("Car not found.");
+            }
+            car.discount = discount;
+            await dbContext.SaveChangesAsync();
+            return Ok("Discount added successfully.");
+        }
     }
 }
