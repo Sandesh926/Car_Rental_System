@@ -128,7 +128,7 @@ namespace Car_Rental_System.Controllers
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         [HttpPut("/accept")]
-        public async Task<IActionResult> AcceptCarRent(string car_id)
+        public async Task<IActionResult> AcceptCarRent([FromBody] string car_id)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))
@@ -161,7 +161,7 @@ namespace Car_Rental_System.Controllers
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         [HttpPut("/reject")]
-        public async Task<IActionResult> RejectCarRent(string car_id)
+        public async Task<IActionResult> RejectCarRent([FromBody] string car_id)
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(tokenString))
