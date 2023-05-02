@@ -75,6 +75,11 @@ const navConfig = [
     icon: <CarRentalIcon />,
   },
   {
+    title: 'my rents',
+    path: '/dashboard/myrents',
+    icon: <CarRentalIcon />,
+  },
+  {
     title: 'damage request form',
     path: '/dashboard/damagerequest',
     icon: <InsertDriveFileIcon />,

@@ -33,7 +33,8 @@ export default function NavSection({ data = [], ...other }) {
       (item) =>
         item.title !== "damage request form" &&
         item.title !== "Add staff" &&
-        item.title !== "Add admin"
+        item.title !== "Add admin" &&
+        item.title !== "my rents"
     );
   } else if (isCustomer) {
     filteredData = data.filter(
@@ -46,7 +47,8 @@ export default function NavSection({ data = [], ...other }) {
         item.title !== "return cars" &&
         item.title !== "sales" &&
         item.title !== "track customer" &&
-        item.title !== "car damage"
+        item.title !== "car damage" &&
+        item.title !== "manage rents"
     );
   }
 
