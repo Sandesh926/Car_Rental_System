@@ -20,6 +20,7 @@ import CustomerDetails from "./pages/CustomerDetails";
 import ChangePassword from "./pages/ChangePassword";
 import AddDocument from "./pages/AddDocuments";
 import DamageRequest from "./pages/DamageRequest"
+import RentCars from "./pages/RentCars"
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +59,7 @@ export default function Router() {
         { path: '/dashboard/changepassword', element: <ChangePassword /> },
         { path: '/dashboard/adddocument', element: <AddDocument /> },
         { path: 'damagerequest', element: <DamageRequest /> },
+        { path: 'rentcars', element: <RentCars /> },
       ],
     },
     {
