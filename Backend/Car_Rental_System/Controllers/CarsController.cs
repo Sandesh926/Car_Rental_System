@@ -62,7 +62,6 @@ namespace Car_Rental_System.Controllers
                 Year = addCarRequest.Year,
                 Color = addCarRequest.Color,
                 Rent_Price = addCarRequest.Rent_Price,
-                Availability_Status = addCarRequest.Availability_Status,
                 ImageLink = addCarRequest.ImageLink
             };
 
@@ -86,7 +85,6 @@ namespace Car_Rental_System.Controllers
                 car.Year = updateCarRequest.Year;
                 car.Color = updateCarRequest.Color;
                 car.Rent_Price = updateCarRequest.Rent_Price;
-                car.Availability_Status = updateCarRequest.Availability_Status;
                 car.ImageLink = updateCarRequest.ImageLink;
 
                 await dbContext.SaveChangesAsync();

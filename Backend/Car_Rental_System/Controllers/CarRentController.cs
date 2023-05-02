@@ -62,6 +62,13 @@ namespace Car_Rental_System.Controllers
 
             if (customer != null)
             {
+                //find all customer damage record and see if there is any pending payment
+                var customerDamage = await dbContext.DamageCar.FirstOrDefaultAsync(c => c.customer_id.ToString() == customer.Customer_Id.ToString() && c.Charge_status != "Paid");
+                if (customerDamage!=null)
+                {
+                    return BadRequest("Customer has pending damage payment.");
+                }
+                
                 if (customer.Customer_Document.IsNullOrEmpty())
                 {
                     return BadRequest("Customer has not added their document yet.");
@@ -86,11 +93,11 @@ namespace Car_Rental_System.Controllers
             var carRentObj = new RentCar()
             {
                 Rent_id = Guid.NewGuid(),
-                Rent_date_From = carRent.Rent_date_From,
-                Rent_date_To = carRent.Rent_date_To,
-                Car_id = carRent.Car_id,
-                Staff_id = staff_id,
-                Customer_id = customer_id,
+                Rent_date_From = carRent.Rent_date_From.ToDateTime(TimeOnly.MinValue),
+                Rent_date_To = carRent.Rent_date_To.ToDateTime(TimeOnly.MaxValue),
+                Car_id = Guid.Parse(carRent.Car_id),
+                Staff_id = Guid.Parse(staff_id),
+                Customer_id = Guid.Parse(customer_id),
                 Rent_Status = carRent.Rent_Status,
                 Discount = discount
             };
@@ -123,8 +130,29 @@ namespace Car_Rental_System.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCarRents()
         {
-            var carRents = await dbContext.RentCar.ToListAsync();
-            return Ok(carRents);
+            var carRents = await dbContext.RentCar
+                .Include(r => r.Customer)
+                .Include(r => r.Staff)
+                .Include(r => r.Car)
+                .ToListAsync();
+
+            var result = carRents.Select(r => new 
+            {
+                Rent_id = r.Rent_id,
+                Rent_date_From = r.Rent_date_From,
+                Rent_date_To = r.Rent_date_To,
+                Car_id = r.Car_id,
+                Car_name = r.Car.Car_Name,
+                Customer_id = r.Customer_id,
+                Customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
+                Staff_id = r.Staff_id,
+                Staff_name = r.Staff.Staff_Name,
+                ApprovedBy = r.ApprovedBy,
+                Discount = r.Discount,
+                Rent_Status = r.Rent_Status
+            });
+
+            return Ok(result);
         }
 
 
@@ -178,9 +206,9 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Staff does not exist in the database.");
             }
 
-            if (!carRentObj.Customer_id.IsNullOrEmpty())
+            if (!carRentObj.Customer_id.ToString().IsNullOrEmpty())
             {
-                var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == carRentObj.Customer_id);
+                var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id == carRentObj.Customer_id);
                 customer.LastRentalDate = DateTime.Now;
                 //count if there are more than 3 rentals of car by this user in the last 3 months
                 var count = await dbContext.RentCar.Where(c => c.Customer_id == carRentObj.Customer_id && c.Rent_date_From >= DateTime.Now.AddMonths(-3)).CountAsync();
@@ -198,9 +226,9 @@ namespace Car_Rental_System.Controllers
             }
 
             //change car status to rented
-            var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRentObj.Car_id);
+            var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id == carRentObj.Car_id);
             car.Availability_Status = "Rented";
-            carRentObj.ApprovedBy = staff_id;
+            carRentObj.ApprovedBy = staff.Staff_Name;
             carRentObj.Rent_Status = "Accepted";
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
@@ -237,7 +265,7 @@ namespace Car_Rental_System.Controllers
             {
                 return BadRequest("Staff does not exist in the database.");
             }
-            carRentObj.ApprovedBy = staff_id;
+            carRentObj.ApprovedBy = staff.Staff_Name;
             carRentObj.Rent_Status = "Rejected";
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
@@ -275,7 +303,7 @@ namespace Car_Rental_System.Controllers
             }
             carRentObj.Rent_Status = "Returned";
             //set car status to available
-            var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRentObj.Car_id);
+            var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id== carRentObj.Car_id);
             car.Availability_Status = "Available";
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
@@ -297,37 +325,57 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Token is empty.");
             }
             var id = getUserId.GetUserIdFromToken(tokenString);
-            var carRents = await dbContext.RentCar.Where(c => c.Customer_id == id).ToListAsync();
-            if (carRents.Count<1)
+            var carRents = await dbContext.RentCar
+                .Include(r => r.Customer)
+                .Include(r => r.Staff)
+                .Include(r => r.Car)
+                .Where(r => r.Customer_id.ToString() == id || r.Staff_id.ToString() == id)
+                .ToListAsync();
+            var result = carRents.Select(r => new 
             {
-                carRents = await dbContext.RentCar.Where(c => c.Staff_id == id).ToListAsync();
-            }
-            return Ok(carRents);
+                Rent_id = r.Rent_id,
+                Rent_date_From = r.Rent_date_From,
+                Rent_date_To = r.Rent_date_To,
+                Car_id = r.Car_id,
+                Car_name = r.Car.Car_Name,
+                Customer_id = r.Customer_id,
+                Customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
+                Staff_id = r.Staff_id,
+                Staff_name = r.Staff.Staff_Name,
+                ApprovedBy = r.ApprovedBy,
+                Discount = r.Discount,
+                Rent_Status = r.Rent_Status
+            });
+
+            return Ok(result);
         }
 
 
 
         //show frequently rented cars
-        [HttpGet("/frequent")]
-        public async Task<IActionResult> GetFrequentRentedCars()
+        [HttpGet("/frequentlyRented")]
+        public async Task<IActionResult> GetFrequentlyRentedCars()
         {
             var cars = await dbContext.Cars.ToListAsync();
             var carRents = await dbContext.RentCar.ToListAsync();
-            var carRentsGrouped = carRents.GroupBy(c => c.Car_id).ToList();
-            var carRentsGroupedSorted = carRentsGrouped.OrderByDescending(c => c.Count()).ToList();
-            var carRentsGroupedSortedIds = carRentsGroupedSorted.Select(c => c.Key).ToList();
-            var carRentsGroupedSortedIdsCars = new List<Cars>();
-            foreach (var id in carRentsGroupedSortedIds)
-            {
-                var car = cars.FirstOrDefault(c => c.Car_id.ToString() == id);
-                carRentsGroupedSortedIdsCars.Add(car);
-            }
-            return Ok(carRentsGroupedSortedIdsCars);
+            var rentedCarIds = carRents.Select(r => r.Car_id).ToList();
+            var frequentlyRentedCars = cars.Where(c => rentedCarIds.Contains(c.Car_id)).ToList();
+
+            return Ok(frequentlyRentedCars);
         }
 
 
 
-
+        //show never rented cars
+        [HttpGet("/neverRented")]
+        public async Task<IActionResult> GetNeverRentedCars()
+        {
+            var cars = await dbContext.Cars.ToListAsync();
+            var carRents = await dbContext.RentCar.ToListAsync();
+            var rentedCarIds = carRents.Select(r => r.Car_id).ToList();
+            var neverRentedCars = cars.Where(c => !rentedCarIds.Contains(c.Car_id)).ToList();
+            return Ok(neverRentedCars);
+        }
 
 
         

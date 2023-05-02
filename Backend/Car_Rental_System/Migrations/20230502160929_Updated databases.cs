@@ -76,6 +76,7 @@ namespace Car_Rental_System.Migrations
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rent_Price = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Availability_Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     discount = table.Column<double>(type: "float", nullable: false)
                 },
@@ -106,42 +107,6 @@ namespace Car_Rental_System.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Customer_Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DamageCar",
-                columns: table => new
-                {
-                    Damage_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DamageDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    car_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    customer_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    staff_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DamageCharge = table.Column<double>(type: "float", nullable: true),
-                    Charge_status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DamageCar", x => x.Damage_id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RentCar",
-                columns: table => new
-                {
-                    Rent_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Rent_date_From = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Rent_date_To = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Car_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Customer_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Staff_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Discount = table.Column<double>(type: "float", nullable: true),
-                    Rent_Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RentCar", x => x.Rent_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,6 +232,80 @@ namespace Car_Rental_System.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DamageCar",
+                columns: table => new
+                {
+                    Damage_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DamageDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    car_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Car_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    customer_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Customer_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    staff_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DamageCharge = table.Column<double>(type: "float", nullable: true),
+                    Charge_status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DamageCar", x => x.Damage_id);
+                    table.ForeignKey(
+                        name: "FK_DamageCar_Cars_Car_id",
+                        column: x => x.Car_id,
+                        principalTable: "Cars",
+                        principalColumn: "Car_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DamageCar_Customers_Customer_Id",
+                        column: x => x.Customer_Id,
+                        principalTable: "Customers",
+                        principalColumn: "Customer_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DamageCar_Staff_staff_id",
+                        column: x => x.staff_id,
+                        principalTable: "Staff",
+                        principalColumn: "Staff_Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RentCar",
+                columns: table => new
+                {
+                    Rent_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Rent_date_From = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Rent_date_To = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Car_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Car_id1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Customer_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Customer_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Staff_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Discount = table.Column<double>(type: "float", nullable: true),
+                    Rent_Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RentCar", x => x.Rent_id);
+                    table.ForeignKey(
+                        name: "FK_RentCar_Cars_Car_id1",
+                        column: x => x.Car_id1,
+                        principalTable: "Cars",
+                        principalColumn: "Car_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RentCar_Customers_Customer_Id",
+                        column: x => x.Customer_Id,
+                        principalTable: "Customers",
+                        principalColumn: "Customer_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RentCar_Staff_Staff_id",
+                        column: x => x.Staff_id,
+                        principalTable: "Staff",
+                        principalColumn: "Staff_Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -305,6 +344,36 @@ namespace Car_Rental_System.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DamageCar_Car_id",
+                table: "DamageCar",
+                column: "Car_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DamageCar_Customer_Id",
+                table: "DamageCar",
+                column: "Customer_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DamageCar_staff_id",
+                table: "DamageCar",
+                column: "staff_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentCar_Car_id1",
+                table: "RentCar",
+                column: "Car_id1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentCar_Customer_Id",
+                table: "RentCar",
+                column: "Customer_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RentCar_Staff_id",
+                table: "RentCar",
+                column: "Staff_id");
         }
 
         /// <inheritdoc />
@@ -329,25 +398,25 @@ namespace Car_Rental_System.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cars");
-
-            migrationBuilder.DropTable(
-                name: "Customers");
-
-            migrationBuilder.DropTable(
                 name: "DamageCar");
 
             migrationBuilder.DropTable(
                 name: "RentCar");
 
             migrationBuilder.DropTable(
-                name: "Staff");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Cars");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Staff");
         }
     }
 }

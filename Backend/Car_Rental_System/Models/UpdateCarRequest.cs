@@ -7,7 +7,6 @@
         public int Year { get; set; }
         public string Color { get; set; }
         public string Rent_Price { get; set; }
-        public string Availability_Status { get; set; }
 
         public string? ImageLink { get; set; }
     }

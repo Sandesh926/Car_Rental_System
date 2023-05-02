@@ -10,13 +10,16 @@ namespace Car_Rental_System.Models
         public DateTime DamageDate{ get; set; }
 
         [ForeignKey("Cars")]
-        public string car_id { get; set; }
+        public Guid car_id { get; set; }
+        public virtual Cars Car { get; set; }
 
         [ForeignKey("Customers")]
-        public string customer_id { get; set; }
+        public Guid customer_id { get; set; }
+        public virtual Customers Customer { get; set; }
 
         [ForeignKey("Staff")]
-        public string? staff_id { get; set; }
+        public Guid? staff_id { get; set; }
+        public virtual Staff Staff { get; set; }
         public double? DamageCharge { get; set; }
         public string Charge_status { get; set; } = "Waiting";
 

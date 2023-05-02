@@ -65,9 +65,9 @@ namespace Car_Rental_System.Controllers
                 var damageCarObj = new DamageCar()
                 {
                     Damage_id = Guid.NewGuid(),
-                    car_id = damageCar.car_id,
+                    car_id = Guid.Parse(damageCar.car_id),
                     DamageDate = damageCar.DamageDate,
-                    customer_id = userId // Assign the user id to the damage car object
+                    customer_id = Guid.Parse(userId) // Assign the user id to the damage car object
                 };
                 await dbContext.DamageCar.AddAsync(damageCarObj);
                 await dbContext.SaveChangesAsync();
@@ -113,7 +113,7 @@ namespace Car_Rental_System.Controllers
                 }
                 
                 damageCar.DamageCharge = fineCar.Fine_Amount;
-                damageCar.staff_id = userId;
+                damageCar.staff_id = Guid.Parse(userId);
                 damageCar.Charge_status = "Pending";
                 await dbContext.SaveChangesAsync();
 
@@ -139,7 +139,7 @@ namespace Car_Rental_System.Controllers
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var id = getUserId.GetUserIdFromToken(tokenString);
 
-            var damageCars = await dbContext.DamageCar.Where(c => c.customer_id == id).ToListAsync();
+            var damageCars = await dbContext.DamageCar.Where(c => c.customer_id.ToString() == id).ToListAsync();
             if (damageCars == null)
             {
                 return BadRequest("No damage cars found for this customer.");
@@ -148,6 +148,56 @@ namespace Car_Rental_System.Controllers
         }
 
 
+        //get all damage cars
+        [HttpGet("getDamageCars")]
+        public async Task<IActionResult> GetDamageCars()
+        {
+            var damageCars = await dbContext.DamageCar
+                .Include(r => r.Customer)
+                .Include(r => r.Staff)
+                .Include(r => r.Car)
+                .ToListAsync();
+
+            if (damageCars == null)
+            {
+                return BadRequest("No damage cars found.");
+            }
+
+            var result = damageCars.Select(r => new 
+            {
+                //public Guid Damage_id { get; set; }
+                //public DateTime DamageDate{ get; set; }
+
+                //[ForeignKey("Cars")]
+                //public string car_id { get; set; }
+                //public virtual Cars Car { get; set; }
+
+                //[ForeignKey("Customers")]
+                //public string customer_id { get; set; }
+                //public virtual Customers Customer { get; set; }
+
+                //[ForeignKey("Staff")]
+                //public string? staff_id { get; set; }
+                //public virtual Staff Staff { get; set; }
+                //public double? DamageCharge { get; set; }
+                //public string Charge_status { get; set; } = "Waiting";
+                Damage_Id = r.Damage_id,
+                DamageDate = r.DamageDate,
+                car_id = r.Car.Car_id,
+                car_name = r.Car.Car_Name,
+                customer_id = r.Customer.Customer_Id,
+                customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
+                staff_id = r.Staff.Staff_Id,
+                staff_name = r.Staff.Staff_Name,
+                DamageCharge = r.DamageCharge,
+                Charge_status = r.Charge_status
+
+
+            });
+
+            
+            return Ok(result);
+        }
 
 
 
