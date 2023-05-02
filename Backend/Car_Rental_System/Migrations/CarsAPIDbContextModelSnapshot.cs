@@ -156,11 +156,17 @@ namespace Car_Rental_System.Migrations
                     b.Property<Guid>("Car_id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("Car_id1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Charge_status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("Customer_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Customer_Id1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("DamageCharge")
@@ -169,22 +175,16 @@ namespace Car_Rental_System.Migrations
                     b.Property<DateTime>("DamageDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("car_id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("customer_id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("staff_id")
+                    b.Property<Guid?>("Staff_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Damage_id");
 
-                    b.HasIndex("Car_id");
+                    b.HasIndex("Car_id1");
 
-                    b.HasIndex("Customer_Id");
+                    b.HasIndex("Customer_Id1");
 
-                    b.HasIndex("staff_id");
+                    b.HasIndex("Staff_Id");
 
                     b.ToTable("DamageCar");
                 });
@@ -204,10 +204,10 @@ namespace Car_Rental_System.Migrations
                     b.Property<Guid>("Car_id1")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Customer_Id")
+                    b.Property<Guid?>("Customer_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("Customer_id")
+                    b.Property<Guid>("Customer_Id1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("Discount")
@@ -223,16 +223,16 @@ namespace Car_Rental_System.Migrations
                     b.Property<DateTime>("Rent_date_To")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("Staff_id")
+                    b.Property<Guid?>("Staff_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Rent_id");
 
                     b.HasIndex("Car_id1");
 
-                    b.HasIndex("Customer_Id");
+                    b.HasIndex("Customer_Id1");
 
-                    b.HasIndex("Staff_id");
+                    b.HasIndex("Staff_Id");
 
                     b.ToTable("RentCar");
                 });
@@ -472,19 +472,19 @@ namespace Car_Rental_System.Migrations
                 {
                     b.HasOne("Car_Rental_System.Models.Cars", "Car")
                         .WithMany()
-                        .HasForeignKey("Car_id")
+                        .HasForeignKey("Car_id1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Car_Rental_System.Models.Customers", "Customer")
                         .WithMany()
-                        .HasForeignKey("Customer_Id")
+                        .HasForeignKey("Customer_Id1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Car_Rental_System.Models.Staff", "Staff")
                         .WithMany()
-                        .HasForeignKey("staff_id");
+                        .HasForeignKey("Staff_Id");
 
                     b.Navigation("Car");
 
@@ -503,13 +503,13 @@ namespace Car_Rental_System.Migrations
 
                     b.HasOne("Car_Rental_System.Models.Customers", "Customer")
                         .WithMany()
-                        .HasForeignKey("Customer_Id")
+                        .HasForeignKey("Customer_Id1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Car_Rental_System.Models.Staff", "Staff")
                         .WithMany()
-                        .HasForeignKey("Staff_id");
+                        .HasForeignKey("Staff_Id");
 
                     b.Navigation("Car");
 
