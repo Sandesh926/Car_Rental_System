@@ -108,9 +108,12 @@ namespace Car_Rental_System.Controllers
                     Car_id = Guid.Parse(carRent.Car_id),
                     Customer_Id = null,
                     Staff_Id = Guid.Parse(staff_id),
-                    Rent_Status = carRent.Rent_Status,
-                    Discount = discount
+                    Rent_Status = "Accepted",
+                    Discount = discount,
+                    ApprovedBy = staff.Staff_Name
                 };
+                var Car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id == carRentObj.Car_id);
+                Car.Availability_Status = "Rented";
                 await dbContext.RentCar.AddAsync(carRentObj);
                 await dbContext.SaveChangesAsync();
             }
@@ -125,6 +128,27 @@ namespace Car_Rental_System.Controllers
 
         }
 
+        //get all car rents with pending status
+        [HttpGet("pending")]
+        public async Task<IActionResult> GetAllPendingCarRents()
+        {
+            var carRents = await (from rc in dbContext.RentCar
+                join c in dbContext.Cars on rc.Car_id equals c.Car_id
+                join cu in dbContext.Customers on rc.Customer_Id equals cu.Customer_Id
+                where rc.Rent_Status == "Pending"
+                select new
+                {
+                    rc.Rent_id,
+                    rc.Rent_date_From,
+                    rc.Rent_date_To,
+                    CarName = c.Car_Name,
+                    CustomerName = cu.Customer_firstName + " " + cu.Customer_lastName,
+                    rc.ApprovedBy,
+                    rc.Discount,
+                    rc.Rent_Status
+                }).ToListAsync();
+            return Ok(carRents);
+        }
 
 
         //cancel car rent
