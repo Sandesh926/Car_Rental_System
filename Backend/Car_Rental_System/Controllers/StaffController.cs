@@ -92,5 +92,36 @@ namespace Car_Rental_System.Controllers
             // returing the list of staff in 200 response
             return Ok(await dbContext.Staff.ToListAsync());
         }
+
+
+
+        //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //change password
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var staffId = getUserId.GetUserIdFromToken(tokenString);
+            var staff = await dbContext.Staff.FindAsync(Guid.Parse(staffId));
+            if (staff == null)
+            {
+                return NotFound("Staff not found.");
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(changePassword.OldPassword, staff.Staff_Password))
+            {
+                return BadRequest("Invalid password.");
+            }
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(changePassword.NewPassword);
+            staff.Staff_Password = hashedPassword;
+            await dbContext.SaveChangesAsync();
+            return Ok("Password changed successfully.");
+        }
     }
 }

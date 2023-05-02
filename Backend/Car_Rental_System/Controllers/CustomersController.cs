@@ -214,7 +214,7 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Token is empty.");
             }
             var customerId = getUserId.GetUserIdFromToken(tokenString);
-            var customer = await dbContext.Customers.FindAsync(customerId);
+            var customer = await dbContext.Customers.FindAsync(Guid.Parse(customerId));
             if (customer == null)
             {
                 return NotFound("Customer not found.");
