@@ -17,9 +17,14 @@ namespace Car_Rental_System.Controllers
 
         private readonly CarsAPIDbContext dbContext;
 
-        public AdminController(CarsAPIDbContext dbContext)
+        //create object for GetUserId
+        private GetUserId getUserId;
+
+        // Creating a constructor and injecting the dbcontext
+        public AdminController(CarsAPIDbContext dbContext, GetUserId getUserId)
         {
             this.dbContext = dbContext;
+            this.getUserId = getUserId;
         }
 
         [HttpPost]
@@ -48,7 +53,7 @@ namespace Car_Rental_System.Controllers
             var admin = await dbContext.Admin.FirstOrDefaultAsync(a => a.Admin_email == loginAdmin.Email);
             if (admin == null)
             {
-                return BadRequest("Invalid Credentials");
+                return BadRequest("Admin not found");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(loginAdmin.Password, admin.Admin_password))

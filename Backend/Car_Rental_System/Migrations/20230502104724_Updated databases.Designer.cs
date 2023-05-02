@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_Rental_System.Migrations
 {
     [DbContext(typeof(CarsAPIDbContext))]
-    [Migration("20230502075110_Updated database")]
-    partial class Updateddatabase
+    [Migration("20230502104724_Updated databases")]
+    partial class Updateddatabases
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,6 +115,9 @@ namespace Car_Rental_System.Migrations
 
                     b.Property<string>("Customer_lastName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Document_Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsRegular")

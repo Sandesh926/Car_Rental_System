@@ -15,10 +15,14 @@ namespace Car_Rental_System.Controllers
         // this is used to talk to in-memory database
         private readonly CarsAPIDbContext dbContext;
 
+        //create object for GetUserId
+        private GetUserId getUserId;
+
         // Creating a constructor and injecting the dbcontext
-        public CarsController(CarsAPIDbContext dbContext)
+        public CarsController(CarsAPIDbContext dbContext, GetUserId getUserId)
         {
             this.dbContext = dbContext;
+            this.getUserId = getUserId;
         }
 
 

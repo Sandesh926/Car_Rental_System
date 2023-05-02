@@ -18,11 +18,13 @@ namespace Car_Rental_System.Controllers
         private readonly CarsAPIDbContext dbContext;
 
         //create object for GetUserId
-        private readonly GetUserId _getUserId;
+        private GetUserId getUserId;
 
-        public CarRentController(CarsAPIDbContext dbContext)
+        // Creating a constructor and injecting the dbcontext
+        public CarRentController(CarsAPIDbContext dbContext, GetUserId getUserId)
         {
             this.dbContext = dbContext;
+            this.getUserId = getUserId;
         }
 
 
@@ -36,7 +38,7 @@ namespace Car_Rental_System.Controllers
             {
                 return BadRequest("Token is empty.");
             }
-            var userID = _getUserId.GetUserIdFromToken(tokenString);
+            var userID = getUserId.GetUserIdFromToken(tokenString);
             var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == userID);
             var staff = await dbContext.Staff.FirstOrDefaultAsync(c => c.Staff_Id.ToString() == userID);
 
@@ -127,7 +129,7 @@ namespace Car_Rental_System.Controllers
             {
                 return BadRequest("Token is empty.");
             }
-            var staff_id = _getUserId.GetUserIdFromToken(tokenString);
+            var staff_id = getUserId.GetUserIdFromToken(tokenString);
 
             var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
             if (carRentObj == null)
@@ -160,7 +162,7 @@ namespace Car_Rental_System.Controllers
             {
                 return BadRequest("Token is empty.");
             }
-            var staff_id = _getUserId.GetUserIdFromToken(tokenString);
+            var staff_id = getUserId.GetUserIdFromToken(tokenString);
             var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
             if (carRentObj == null)
             {

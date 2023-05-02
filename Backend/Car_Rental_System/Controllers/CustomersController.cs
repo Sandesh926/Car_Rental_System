@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Car_Rental_System;
 using Car_Rental_System.Data;
 using Car_Rental_System.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,16 @@ namespace Car_Rental_System.Controllers
         private readonly CarsAPIDbContext dbContext;
 
         //create object for GetUserId
-        private readonly GetUserId _getUserId;
+        private GetUserId getUserId;
 
         // Creating a constructor and injecting the dbcontext
-        public CustomersController(CarsAPIDbContext dbContext)
+        public CustomersController(CarsAPIDbContext dbContext, GetUserId getUserId)
         {
             this.dbContext = dbContext;
+            this.getUserId = getUserId;
         }
+
+
         
         [HttpPost]
         // using this we will create a customer object
@@ -96,6 +100,10 @@ namespace Car_Rental_System.Controllers
         }
 
 
+
+        //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //upload image for customer
         [HttpPost("document")]
         public async Task<IActionResult> AddDocument(IFormFile documentFile)
@@ -105,14 +113,17 @@ namespace Car_Rental_System.Controllers
             {
                 return BadRequest("Token is empty.");
             }
-            var customerId = _getUserId.GetUserIdFromToken(tokenString);
+            var customerId = getUserId.GetUserIdFromToken(tokenString);
 
 
-            var customer = await dbContext.Customers.FindAsync(customerId);
+            var customer = await dbContext.Customers.FindAsync(Guid.Parse(customerId));
             if (customer == null)
             {
                 return NotFound("Customer not found.");
             }
+
+            string fileName = documentFile.FileName;
+            string fileExtension = Path.GetExtension(fileName);
 
             byte[] documentData = null;
             using (var ms = new MemoryStream())
@@ -123,11 +134,17 @@ namespace Car_Rental_System.Controllers
 
             // Update the customer's document in the database
             customer.Customer_Document = documentData;
+            customer.Document_Type = fileExtension;
             await dbContext.SaveChangesAsync();
 
             return Ok("Document added successfully.");
         }
 
+
+
+        //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //get own document
         [HttpGet("document")]
         public async Task<IActionResult> GetOwnDocument()
@@ -137,7 +154,7 @@ namespace Car_Rental_System.Controllers
             {
                 return BadRequest("Token is empty.");
             }
-            var customerId = _getUserId.GetUserIdFromToken(tokenString);
+            var customerId = getUserId.GetUserIdFromToken(tokenString);
             var customer = await dbContext.Customers.FindAsync(customerId);
             if (customer == null)
             {
@@ -149,7 +166,8 @@ namespace Car_Rental_System.Controllers
                 return NotFound("Document not found.");
             }
             var documentStream = new MemoryStream(customer.Customer_Document);
-            return File(documentStream, "application/octet-stream", "document.jpg");
+            var contentType = customer.Document_Type;
+            return File(documentStream, "application/octet-stream", $"{customer.Customer_firstName}{contentType}");
         }
 
 
@@ -168,7 +186,8 @@ namespace Car_Rental_System.Controllers
             }
 
             var documentStream = new MemoryStream(customer.Customer_Document);
-            return File(documentStream, "application/octet-stream", "document.jpg");
+            var contentType = customer.Document_Type;
+            return File(documentStream, "application/octet-stream", $"{customer.Customer_firstName}{contentType}");
         }
 
 
@@ -181,6 +200,10 @@ namespace Car_Rental_System.Controllers
         }
 
 
+
+        //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
         //change password
         [HttpPut("changePassword")]
         public async Task<IActionResult> ChangePassword(string NewPassword, string OldPassword)
@@ -190,7 +213,7 @@ namespace Car_Rental_System.Controllers
             {
                 return BadRequest("Token is empty.");
             }
-            var customerId = _getUserId.GetUserIdFromToken(tokenString);
+            var customerId = getUserId.GetUserIdFromToken(tokenString);
             var customer = await dbContext.Customers.FindAsync(customerId);
             if (customer == null)
             {
