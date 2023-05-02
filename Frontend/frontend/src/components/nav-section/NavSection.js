@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import { NavLink as RouterLink } from 'react-router-dom';
+import PropTypes from "prop-types";
+import { NavLink as RouterLink } from "react-router-dom";
 // @mui
-import { Box, List, ListItemText } from '@mui/material';
+import { Box, List, ListItemText } from "@mui/material";
 //
-import { StyledNavItem, StyledNavItemIcon } from './styles';
+import { StyledNavItem, StyledNavItemIcon } from "./styles";
 
 // ----------------------------------------------------------------------
 
@@ -12,10 +12,48 @@ NavSection.propTypes = {
 };
 
 export default function NavSection({ data = [], ...other }) {
+  // staffloggedIn
+  // adminloggedIn
+  // customerloggedIn
+
+  const admin = window.localStorage.getItem("adminloggedIn");
+  const staff = window.localStorage.getItem("staffloggedIn");
+  const customer = window.localStorage.getItem("customerloggedIn");
+
+  const isAdmin = JSON.parse(admin);
+  const isStaff = JSON.parse(staff);
+  const isCustomer = JSON.parse(customer);
+
+  let filteredData = data;
+
+  if (isAdmin) {
+    filteredData = data.filter((item) => item.title !== "damage request form");
+  } else if (isStaff) {
+    filteredData = data.filter(
+      (item) =>
+        item.title !== "damage request form" &&
+        item.title !== "Add staff" &&
+        item.title !== "Add admin"
+    );
+  } else if (isCustomer) {
+    filteredData = data.filter(
+      (item) =>
+        item.title !== "Add staff" &&
+        item.title !== "Add admin" &&
+        item.title !== "Customer details" &&
+        item.title !== "car inventory" &&
+        item.title !== "rented cars" &&
+        item.title !== "return cars" &&
+        item.title !== "sales" &&
+        item.title !== "track customer" &&
+        item.title !== "car damage"
+    );
+  }
+
   return (
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
-        {data.map((item) => (
+        {filteredData.map((item) => (
           <NavItem key={item.title} item={item} />
         ))}
       </List>
@@ -37,10 +75,10 @@ function NavItem({ item }) {
       component={RouterLink}
       to={path}
       sx={{
-        '&.active': {
-          color: 'text.primary',
-          bgcolor: 'action.selected',
-          fontWeight: 'fontWeightBold',
+        "&.active": {
+          color: "text.primary",
+          bgcolor: "action.selected",
+          fontWeight: "fontWeightBold",
         },
       }}
     >
