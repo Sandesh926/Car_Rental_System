@@ -152,51 +152,31 @@ namespace Car_Rental_System.Controllers
         [HttpGet("getDamageCars")]
         public async Task<IActionResult> GetDamageCars()
         {
-            var damageCars = await dbContext.DamageCar
-                .Include(r => r.Customer)
-                .Include(r => r.Staff)
-                .Include(r => r.Car)
-                .ToListAsync();
+            var damageCars = await (from r in dbContext.DamageCar
+                join c in dbContext.Customers on r.Customer_Id equals c.Customer_Id
+                join s in dbContext.Staff on r.Staff_Id equals s.Staff_Id
+                join ca in dbContext.Cars on r.Car_id equals ca.Car_id
+                select new
+                {
+                    Damage_Id = r.Damage_id,
+                    DamageDate = r.DamageDate,
+                    car_id = ca.Car_id,
+                    car_name = ca.Car_Name,
+                    customer_id = c.Customer_Id,
+                    customer_name = c.Customer_firstName + " " + c.Customer_lastName,
+                    staff_id = s.Staff_Id,
+                    staff_name = s.Staff_Name,
+                    DamageCharge = r.DamageCharge,
+                    Charge_status = r.Charge_status
+                }).ToListAsync();
 
-            if (damageCars == null)
+            if (damageCars == null || !damageCars.Any())
             {
                 return BadRequest("No damage cars found.");
             }
 
-            var result = damageCars.Select(r => new 
-            {
-                //public Guid Damage_id { get; set; }
-                //public DateTime DamageDate{ get; set; }
-
-                //[ForeignKey("Cars")]
-                //public string car_id { get; set; }
-                //public virtual Cars Car { get; set; }
-
-                //[ForeignKey("Customers")]
-                //public string customer_id { get; set; }
-                //public virtual Customers Customer { get; set; }
-
-                //[ForeignKey("Staff")]
-                //public string? staff_id { get; set; }
-                //public virtual Staff Staff { get; set; }
-                //public double? DamageCharge { get; set; }
-                //public string Charge_status { get; set; } = "Waiting";
-                Damage_Id = r.Damage_id,
-                DamageDate = r.DamageDate,
-                car_id = r.Car.Car_id,
-                car_name = r.Car.Car_Name,
-                customer_id = r.Customer.Customer_Id,
-                customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
-                staff_id = r.Staff.Staff_Id,
-                staff_name = r.Staff.Staff_Name,
-                DamageCharge = r.DamageCharge,
-                Charge_status = r.Charge_status
-
-
-            });
-
             
-            return Ok(result);
+            return Ok(damageCars);
         }
 
 

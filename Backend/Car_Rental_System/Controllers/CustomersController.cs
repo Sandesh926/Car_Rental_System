@@ -124,6 +124,10 @@ namespace Car_Rental_System.Controllers
 
             string fileName = documentFile.FileName;
             string fileExtension = Path.GetExtension(fileName);
+            //if (fileExtension != ".pdf" || fileExtension != ".png")
+            //{
+            //    return BadRequest("Choose PDF or PNG only.");
+            //}
 
             byte[] documentData = null;
             using (var ms = new MemoryStream())
@@ -135,8 +139,9 @@ namespace Car_Rental_System.Controllers
             // Update the customer's document in the database
             customer.Customer_Document = documentData;
             customer.Document_Type = fileExtension;
-            await dbContext.SaveChangesAsync();
 
+            
+            await dbContext.SaveChangesAsync();
             return Ok("Document added successfully.");
         }
 

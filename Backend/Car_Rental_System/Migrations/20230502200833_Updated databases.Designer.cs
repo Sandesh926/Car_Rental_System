@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Car_Rental_System.Migrations
 {
     [DbContext(typeof(CarsAPIDbContext))]
-    [Migration("20230502171755_Updated databases")]
+    [Migration("20230502200833_Updated databases")]
     partial class Updateddatabases
     {
         /// <inheritdoc />
@@ -159,17 +159,11 @@ namespace Car_Rental_System.Migrations
                     b.Property<Guid>("Car_id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Car_id1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Charge_status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("Customer_Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Customer_Id1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("DamageCharge")
@@ -182,12 +176,6 @@ namespace Car_Rental_System.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Damage_id");
-
-                    b.HasIndex("Car_id1");
-
-                    b.HasIndex("Customer_Id1");
-
-                    b.HasIndex("Staff_Id");
 
                     b.ToTable("DamageCar");
                 });
@@ -204,13 +192,7 @@ namespace Car_Rental_System.Migrations
                     b.Property<Guid>("Car_id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Car_id1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("Customer_Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Customer_Id1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double?>("Discount")
@@ -230,12 +212,6 @@ namespace Car_Rental_System.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Rent_id");
-
-                    b.HasIndex("Car_id1");
-
-                    b.HasIndex("Customer_Id1");
-
-                    b.HasIndex("Staff_Id");
 
                     b.ToTable("RentCar");
                 });
@@ -469,56 +445,6 @@ namespace Car_Rental_System.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Car_Rental_System.Models.DamageCar", b =>
-                {
-                    b.HasOne("Car_Rental_System.Models.Cars", "Car")
-                        .WithMany()
-                        .HasForeignKey("Car_id1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Car_Rental_System.Models.Customers", "Customer")
-                        .WithMany()
-                        .HasForeignKey("Customer_Id1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Car_Rental_System.Models.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("Staff_Id");
-
-                    b.Navigation("Car");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("Car_Rental_System.Models.RentCar", b =>
-                {
-                    b.HasOne("Car_Rental_System.Models.Cars", "Car")
-                        .WithMany()
-                        .HasForeignKey("Car_id1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Car_Rental_System.Models.Customers", "Customer")
-                        .WithMany()
-                        .HasForeignKey("Customer_Id1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Car_Rental_System.Models.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("Staff_Id");
-
-                    b.Navigation("Car");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
