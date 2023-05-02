@@ -52,6 +52,11 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Car does not exist in the database.");
             }
 
+            if (car.Availability_Status == "Rented")
+            {
+                return BadRequest("Car is already rented.");
+            }
+
             double discount = car.discount;
 
             if (customer != null)
@@ -167,6 +172,9 @@ namespace Car_Rental_System.Controllers
                 await dbContext.SaveChangesAsync();
             }
 
+            //change car status to rented
+            var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRentObj.Car_id);
+            car.Availability_Status = "Rented";
             carRentObj.ApprovedBy = staff_id;
             carRentObj.Rent_Status = "Accepted";
             await dbContext.SaveChangesAsync();
@@ -201,6 +209,36 @@ namespace Car_Rental_System.Controllers
             }
             carRentObj.ApprovedBy = staff_id;
             carRentObj.Rent_Status = "Rejected";
+            await dbContext.SaveChangesAsync();
+            return Ok(carRentObj);
+        }
+
+
+        //make rent status to paid
+        [HttpPut("/pay/{car_id}")]
+        public async Task<IActionResult> PayCarRent(string car_id)
+        {
+            var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
+            if (carRentObj == null)
+            {
+                return NotFound();
+            }
+            carRentObj.Rent_Status = "Paid";
+            await dbContext.SaveChangesAsync();
+            return Ok(carRentObj);
+        }
+
+
+        //make rent status to returned
+        [HttpPut("/return/{car_id}")]
+        public async Task<IActionResult> ReturnCarRent(string car_id)
+        {
+            var carRentObj = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == car_id);
+            if (carRentObj == null)
+            {
+                return NotFound();
+            }
+            carRentObj.Rent_Status = "Returned";
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
         }

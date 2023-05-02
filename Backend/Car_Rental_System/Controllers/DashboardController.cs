@@ -56,5 +56,23 @@ namespace Car_Rental_System.Controllers
         }
 
 
+        //get car rents whose status are pending
+        [HttpGet("pendingrents")]
+        public async Task<IActionResult> GetPendingRents()
+        {
+            var pendingRents = await dbContext.RentCar.Where(r => r.Rent_Status == "Pending").CountAsync();
+            return Ok(pendingRents);
+        }
+
+        //get car rents whose status are paid
+        [HttpGet("paidrents")]
+        public async Task<IActionResult> GetPaidRents()
+        {
+            var paidRents = await dbContext.RentCar.Where(r => r.Rent_Status == "Paid").CountAsync();
+            return Ok(paidRents);
+        }
+
+
+
     }
 }
