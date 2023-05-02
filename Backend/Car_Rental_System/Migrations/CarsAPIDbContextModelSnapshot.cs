@@ -80,8 +80,8 @@ namespace Car_Rental_System.Migrations
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("discount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("discount")
+                        .HasColumnType("float");
 
                     b.HasKey("Car_id");
 

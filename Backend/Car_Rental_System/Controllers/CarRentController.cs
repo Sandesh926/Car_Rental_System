@@ -44,13 +44,15 @@ namespace Car_Rental_System.Controllers
 
             string customer_id = "";
             string staff_id = "";
-            double discount = 0;
+            
             //find car by id
             var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRent.Car_id);
             if (car == null)
             {
                 return BadRequest("Car does not exist in the database.");
             }
+
+            double discount = car.discount;
 
             if (customer != null)
             {
@@ -62,14 +64,14 @@ namespace Car_Rental_System.Controllers
                 customer_id = customer.Customer_Id.ToString();
                 if (customer.IsRegular)
                 {
-                    discount = 0.1;
+                    discount = discount + 0.1;
                 }
             }
             else if (staff != null)
             {
                 carRent.User_Type = "Staff";
                 staff_id = staff.Staff_Id.ToString();
-                discount = 0.25;
+                discount = discount + 0.25;
             }
             else
             {

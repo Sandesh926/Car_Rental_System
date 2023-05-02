@@ -14,6 +14,6 @@ namespace Car_Rental_System.Models
         public string Availability_Status { get; set; }
         public byte[]? Image { get; set; }
 
-        public decimal discount { get; set; } = 0;
+        public double discount { get; set; } = 0;
     }
 }
