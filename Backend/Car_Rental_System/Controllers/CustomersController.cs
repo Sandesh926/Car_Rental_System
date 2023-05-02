@@ -230,6 +230,32 @@ namespace Car_Rental_System.Controllers
             return Ok("Password changed successfully.");
         }
 
+
+        //check if user is regular or not
+        [HttpGet("isRegular")]
+        public async Task<IActionResult> IsRegular()
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var customerId = getUserId.GetUserIdFromToken(tokenString);
+            var customer = await dbContext.Customers.FindAsync(Guid.Parse(customerId));
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            if (customer.IsRegular)
+            {
+                return Ok("Customer is regular.");
+            }
+            else
+            {
+                return Ok("Customer is not regular.");
+            }
+        }
         
 
 
