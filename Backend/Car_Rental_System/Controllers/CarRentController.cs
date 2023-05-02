@@ -52,6 +52,7 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Car does not exist in the database.");
             }
 
+            //check if car is available
             if (car.Availability_Status == "Rented")
             {
                 return BadRequest("Car is already rented.");
@@ -241,6 +242,30 @@ namespace Car_Rental_System.Controllers
             carRentObj.Rent_Status = "Returned";
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
+        }
+
+
+
+
+        //check your car rents
+        //IMPORTANT: TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        //TOKEN IS REQUIRED, SEND IT IN THE HEADER
+        [HttpGet("/myrents")]
+        public async Task<IActionResult> GetMyCarRents()
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var id = getUserId.GetUserIdFromToken(tokenString);
+            var carRents = await dbContext.RentCar.Where(c => c.Customer_id == id).ToListAsync();
+            if (carRents.Count<1)
+            {
+                carRents = await dbContext.RentCar.Where(c => c.Staff_id == id).ToListAsync();
+            }
+            return Ok(carRents);
         }
 
 
