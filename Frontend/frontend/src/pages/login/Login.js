@@ -47,15 +47,28 @@ function Login() {
           Email: email,
         }),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 400 || res.status === 401 || res.status === 402) {
+            return res.json().then((data) => {
+              throw new Error(data);
+            });
+          } else if (res.status !== 200) {
+            return res.json().then((data) => {
+              throw new Error(data);
+            });
+          }
+          return res.json();
+        })
         .then((data) => {
           console.log(data);
-            window.localStorage.setItem("token", JSON.stringify(data));
-            window.localStorage.setItem(`${role}loggedIn`, true);
-            window.localStorage.setItem("role", role);
-            window.location.href = "./dashboard/app";
-        }).catch((error) => {
+          window.localStorage.setItem("token", JSON.stringify(data));
+          window.localStorage.setItem(`${role}loggedIn`, true);
+          window.localStorage.setItem("role", role);
+          window.location.href = "./dashboard/app";
+        })
+        .catch((error) => {
           console.log(error);
+          alert(error);
         });
     } else if (role === "admin") {
       fetch("https://localhost:7116/api/Admin/login", {
@@ -70,15 +83,28 @@ function Login() {
           Email: email,
         }),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 400 || res.status === 401 || res.status === 402) {
+            return res.json().then((data) => {
+              throw new Error(data);
+            });
+          } else if (res.status !== 200) {
+            return res.json().then((data) => {
+              throw new Error(data);
+            });
+          }
+          return res.json();
+        })
         .then((data) => {
           console.log(data);
-            window.localStorage.setItem("token", JSON.stringify(data));
-            window.localStorage.setItem(`${role}loggedIn`, true);
-            window.localStorage.setItem("role", role);
-            window.location.href = "./dashboard/app";
-        }).catch((error) => {
-          console.log(error)
+          window.localStorage.setItem("token", JSON.stringify(data));
+          window.localStorage.setItem(`${role}loggedIn`, true);
+          window.localStorage.setItem("role", role);
+          window.location.href = "./dashboard/app";
+        })
+        .catch((error) => {
+          console.log(error);
+          alert(error);
         });
     } else if (role === "staff") {
       fetch("https://localhost:7116/api/Staff/login", {
@@ -93,16 +119,28 @@ function Login() {
           Email: email,
         }),
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 400 || res.status === 401 || res.status === 402) {
+            return res.json().then((data) => {
+              throw new Error(data);
+            });
+          } else if (res.status !== 200) {
+            return res.json().then((data) => {
+              throw new Error(data);
+            });
+          }
+          return res.json();
+        })
         .then((data) => {
           console.log(data);
-          
-            window.localStorage.setItem("token", JSON.stringify(data));
-            window.localStorage.setItem(`${role}loggedIn`, true);
-            window.localStorage.setItem("role", role);
-            window.location.href = "./dashboard/app";
-        }).catch((error) => {
-          console.log(error)
+          window.localStorage.setItem("token", JSON.stringify(data));
+          window.localStorage.setItem(`${role}loggedIn`, true);
+          window.localStorage.setItem("role", role);
+          window.location.href = "./dashboard/app";
+        })
+        .catch((error) => {
+          console.log(error);
+          alert(error);
         });
     }
   };
