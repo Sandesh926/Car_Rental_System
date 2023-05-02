@@ -384,28 +384,31 @@ namespace Car_Rental_System.Controllers
 
 
 
-        //show frequently rented cars
         [HttpGet("/frequentlyRented")]
         public async Task<IActionResult> GetFrequentlyRentedCars()
         {
-            var cars = await dbContext.Cars.ToListAsync();
-            var carRents = await dbContext.RentCar.ToListAsync();
-            var rentedCarIds = carRents.Select(r => r.Car_id).ToList();
-            var frequentlyRentedCars = cars.Where(c => rentedCarIds.Contains(c.Car_id)).ToList();
+            var frequentlyRentedCars = await (from c in dbContext.Cars
+                join rc in dbContext.RentCar on c.Car_id equals rc.Car_id
+                group c by c.Car_id into g
+                orderby g.Count() descending
+                select g.First())
+                .ToListAsync();
 
             return Ok(frequentlyRentedCars);
         }
 
 
 
-        //show never rented cars
         [HttpGet("/neverRented")]
         public async Task<IActionResult> GetNeverRentedCars()
         {
-            var cars = await dbContext.Cars.ToListAsync();
-            var carRents = await dbContext.RentCar.ToListAsync();
-            var rentedCarIds = carRents.Select(r => r.Car_id).ToList();
-            var neverRentedCars = cars.Where(c => !rentedCarIds.Contains(c.Car_id)).ToList();
+            var neverRentedCars = await (from c in dbContext.Cars
+                join rc in dbContext.RentCar on c.Car_id equals rc.Car_id into gj
+                from subrc in gj.DefaultIfEmpty()
+                where subrc == null
+                select c)
+                .ToListAsync();
+
             return Ok(neverRentedCars);
         }
 
