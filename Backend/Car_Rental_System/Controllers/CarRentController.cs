@@ -144,9 +144,29 @@ namespace Car_Rental_System.Controllers
             }
             var staff = await dbContext.Staff.FirstOrDefaultAsync(c => c.Staff_Id.ToString() == staff_id);
             if (staff == null)
-            {
+            {   
                 return BadRequest("Staff does not exist in the database.");
             }
+
+            if (!carRentObj.Customer_id.IsNullOrEmpty())
+            {
+                var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == carRentObj.Customer_id);
+                customer.LastRentalDate = DateTime.Now;
+                //count if there are more than 3 rentals of car by this user in the last 3 months
+                var count = await dbContext.RentCar.Where(c => c.Customer_id == carRentObj.Customer_id && c.Rent_date_From >= DateTime.Now.AddMonths(-3)).CountAsync();
+                if (count >= 3)
+                {
+                    customer.IsRegular = true;
+                    
+                }
+                else
+                {
+                    customer.IsRegular = false;
+                    
+                }
+                await dbContext.SaveChangesAsync();
+            }
+
             carRentObj.ApprovedBy = staff_id;
             carRentObj.Rent_Status = "Accepted";
             await dbContext.SaveChangesAsync();
