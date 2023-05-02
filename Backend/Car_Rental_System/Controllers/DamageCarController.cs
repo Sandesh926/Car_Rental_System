@@ -170,10 +170,10 @@ namespace Car_Rental_System.Controllers
                     Charge_status = r.Charge_status
                 }).ToListAsync();
 
-            if (damageCars == null || !damageCars.Any())
-            {
-                return BadRequest("No damage cars found.");
-            }
+            //if (damageCars == null || !damageCars.Any())
+            //{
+            //    return BadRequest("No damage cars found.");
+            //}
 
             
             return Ok(damageCars);
