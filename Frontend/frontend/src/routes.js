@@ -21,6 +21,8 @@ import ChangePassword from "./pages/ChangePassword";
 import AddDocument from "./pages/AddDocuments";
 import DamageRequest from "./pages/DamageRequest"
 import RentCars from "./pages/RentCars"
+import ManageRents from "./pages/ManageRents";
+import MyRents from "./pages/MyRents";
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +62,8 @@ export default function Router() {
         { path: '/dashboard/adddocument', element: <AddDocument /> },
         { path: 'damagerequest', element: <DamageRequest /> },
         { path: 'rentcars', element: <RentCars /> },
+        { path: 'managerents', element: <ManageRents /> },
+        { path: 'myrents', element: <MyRents /> },
       ],
     },
     {

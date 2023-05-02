@@ -15,7 +15,7 @@ export default function CarDamage() {
             Car Damage
           </Typography>
         </Stack>
-        <h1>This is a car damage page.</h1>
+        
       </Container>
     </>
   );

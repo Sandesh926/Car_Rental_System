@@ -60,6 +60,11 @@ export default function RentCars() {
 
   const useType = window.localStorage.getItem("role");
 
+  const isStaff = window.localStorage.getItem("staffloggedIn");
+  const isCustomer = window.localStorage.getItem("customerloggedIn");
+  
+  const [isRegular, setIsRegular] = useState(false);
+
   const [carID, setCarID] = useState("");
 
   console.log(startDate)
@@ -105,6 +110,26 @@ export default function RentCars() {
     setCarID(id);
     console.log(carID);
   }, [showModal]);
+  
+  useEffect(() => {
+    fetch("https://localhost:7116/api/Customers/isRegular", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${obj.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsRegular(data);
+        // console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
@@ -140,7 +165,7 @@ export default function RentCars() {
                   <br />
                   Color: {data.color}
                   <br />
-                  Rent Price: Rs. {data.rent_Price}
+                  Rent Price: Rs. {isStaff ? (data.rent_Price - 0.25 * data.rent_Price ): (isRegular) ? (data.rent_Price - 0.1 * data.rent_Price) : (data.rent_Price )}
                   <br />
                   Status: {data.availability_Status}
                 </p>
