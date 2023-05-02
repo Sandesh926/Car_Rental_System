@@ -23,6 +23,8 @@ namespace Car_Rental_System.Models
         [ForeignKey("Staff")]
         public string? ApprovedBy { get; set; }
 
+        public double? Discount { get; set; }
+
         public string Rent_Status { get; set; } = "Pending";
     }
 }

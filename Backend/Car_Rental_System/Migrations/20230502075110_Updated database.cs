@@ -96,7 +96,7 @@ namespace Car_Rental_System.Migrations
                     Customer_Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Customer_Document = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     IsRegular = table.Column<bool>(type: "bit", nullable: false),
-                    RegularDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    RegularDiscount = table.Column<double>(type: "float", nullable: true),
                     LastRentalDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Role_id = table.Column<int>(type: "int", nullable: false)
@@ -115,7 +115,7 @@ namespace Car_Rental_System.Migrations
                     car_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     customer_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     staff_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DamageCharge = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DamageCharge = table.Column<double>(type: "float", nullable: true),
                     Charge_status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -134,6 +134,7 @@ namespace Car_Rental_System.Migrations
                     Customer_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Staff_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Discount = table.Column<double>(type: "float", nullable: true),
                     Rent_Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

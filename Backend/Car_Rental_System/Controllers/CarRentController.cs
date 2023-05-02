@@ -27,16 +27,38 @@ namespace Car_Rental_System.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCarRent(RentCarRequest carRent)
         {
+
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userID = GetUserIdFromToken(tokenString);
+            var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == userID);
+            var staff = await dbContext.Staff.FirstOrDefaultAsync(c => c.Staff_Id.ToString() == userID);
+
+            string customer_id = "";
+            string staff_id = "";
+            double discount = 0;
+            //find car by id
             var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id.ToString() == carRent.Car_id);
             if (car == null)
             {
                 return BadRequest("Car does not exist in the database.");
             }
 
-            
-            var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Customer_Id.ToString() == carRent.Customer_id);
-            var staff = await dbContext.Staff.FirstOrDefaultAsync(c => c.Staff_Id.ToString() == carRent.Staff_id);
-            if (customer == null && staff == null)
+            if (customer != null)
+            {
+                carRent.User_Type = "Customer";
+                customer_id = customer.Customer_Id.ToString();
+                if (customer.IsRegular)
+                {
+                    discount = 0.1;
+                }
+            }
+            else if (staff != null)
+            {
+                carRent.User_Type = "Staff";
+                staff_id = staff.Staff_Id.ToString();
+                discount = 0.25;
+            }
+            else
             {
                 return BadRequest("User does not exist in the database.");
             }
@@ -46,14 +68,19 @@ namespace Car_Rental_System.Controllers
                 Rent_date_From = carRent.Rent_date_From,
                 Rent_date_To = carRent.Rent_date_To,
                 Car_id = carRent.Car_id,
-                Staff_id = carRent.Staff_id,
-                Customer_id = carRent.Customer_id,
-                Rent_Status = carRent.Rent_Status
+                Staff_id = staff_id,
+                Customer_id = customer_id,
+                Rent_Status = carRent.Rent_Status,
+                Discount = discount
             };
             await dbContext.RentCar.AddAsync(carRentObj);
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
+
+
         }
+
+
 
         //Get all car rents from database
         [HttpGet]
@@ -146,6 +173,9 @@ namespace Car_Rental_System.Controllers
             var userId = claims.FindFirst(ClaimTypes.Name)?.Value;
             return userId;
         }
+
+
+        
 
         
     }

@@ -11,9 +11,8 @@ namespace Car_Rental_System.Models
 
         public string Car_id { get; set; }
 
-        public string? Customer_id { get; set; }
+        public string? User_Type { get; set; }
 
-        public string? Staff_id { get; set; }
         public string Rent_Status { get; set; } = "Pending";
 
     }

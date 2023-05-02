@@ -17,7 +17,7 @@ namespace Car_Rental_System.Models
 
         [ForeignKey("Staff")]
         public string? staff_id { get; set; }
-        public decimal? DamageCharge { get; set; }
+        public double? DamageCharge { get; set; }
         public string Charge_status { get; set; } = "Waiting";
 
     }
