@@ -79,31 +79,48 @@ namespace Car_Rental_System.Controllers
                 {
                     discount = discount + 0.1;
                 }
+                var carRentObj = new RentCar()
+                {
+                    Rent_id = Guid.NewGuid(),
+                    Rent_date_From = carRent.Rent_date_From.ToDateTime(TimeOnly.MinValue),
+                    Rent_date_To = carRent.Rent_date_To.ToDateTime(TimeOnly.MaxValue),
+                    Car_id = Guid.Parse(carRent.Car_id),
+                    Staff_Id = null,
+                    Customer_Id = Guid.Parse(customer_id),
+                    Rent_Status = carRent.Rent_Status,
+                    Discount = discount
+                };
+                await dbContext.RentCar.AddAsync(carRentObj);
+                await dbContext.SaveChangesAsync();
+
             }
             else if (staff != null)
             {
                 carRent.User_Type = "staff";
                 staff_id = staff.Staff_Id.ToString();
                 discount = discount + 0.25;
+                
+                var carRentObj = new RentCar()
+                {
+                    Rent_id = Guid.NewGuid(),
+                    Rent_date_From = carRent.Rent_date_From.ToDateTime(TimeOnly.MinValue),
+                    Rent_date_To = carRent.Rent_date_To.ToDateTime(TimeOnly.MaxValue),
+                    Car_id = Guid.Parse(carRent.Car_id),
+                    Customer_Id = null,
+                    Staff_Id = Guid.Parse(staff_id),
+                    Rent_Status = carRent.Rent_Status,
+                    Discount = discount
+                };
+                await dbContext.RentCar.AddAsync(carRentObj);
+                await dbContext.SaveChangesAsync();
             }
             else
             {
                 return BadRequest("User does not exist in the database.");
             }
-            var carRentObj = new RentCar()
-            {
-                Rent_id = Guid.NewGuid(),
-                Rent_date_From = carRent.Rent_date_From.ToDateTime(TimeOnly.MinValue),
-                Rent_date_To = carRent.Rent_date_To.ToDateTime(TimeOnly.MaxValue),
-                Car_id = Guid.Parse(carRent.Car_id),
-                Staff_Id = Guid.Parse(staff_id),
-                Customer_Id = Guid.Parse(customer_id),
-                Rent_Status = carRent.Rent_Status,
-                Discount = discount
-            };
-            await dbContext.RentCar.AddAsync(carRentObj);
-            await dbContext.SaveChangesAsync();
-            return Ok(carRentObj);
+
+            
+            return Ok("Successfully Rented.");
 
 
         }
@@ -130,31 +147,23 @@ namespace Car_Rental_System.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCarRents()
         {
-            var carRents = await dbContext.RentCar
-                .Include(r => r.Customer)
-                .Include(r => r.Staff)
-                .Include(r => r.Car)
-                .ToListAsync();
+            var carRents = await (from rc in dbContext.RentCar
+                join c in dbContext.Cars on rc.Car_id equals c.Car_id
+                join cu in dbContext.Customers on rc.Customer_Id equals cu.Customer_Id
+                select new
+                {
+                    rc.Rent_id,
+                    rc.Rent_date_From,
+                    rc.Rent_date_To,
+                    CarName = c.Car_Name,
+                    CustomerName = cu.Customer_firstName + " "+ cu.Customer_lastName,
+                    rc.ApprovedBy,
+                    rc.Discount,
+                    rc.Rent_Status
+                }).ToListAsync();
 
-            var result = carRents.Select(r => new 
-            {
-                Rent_id = r.Rent_id,
-                Rent_date_From = r.Rent_date_From,
-                Rent_date_To = r.Rent_date_To,
-                Car_id = r.Car_id,
-                Car_name = r.Car.Car_Name,
-                Customer_id = r.Customer_Id,
-                Customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
-                Staff_id = r.Staff_Id,
-                Staff_name = r.Staff.Staff_Name,
-                ApprovedBy = r.ApprovedBy,
-                Discount = r.Discount,
-                Rent_Status = r.Rent_Status
-            });
-
-            return Ok(result);
+            return Ok(carRents);
         }
-
 
 
 
@@ -325,29 +334,28 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Token is empty.");
             }
             var id = getUserId.GetUserIdFromToken(tokenString);
-            var carRents = await dbContext.RentCar
-                .Include(r => r.Customer)
-                .Include(r => r.Staff)
-                .Include(r => r.Car)
-                .Where(r => r.Customer_Id.ToString() == id || r.Staff_Id.ToString() == id)
-                .ToListAsync();
-            var result = carRents.Select(r => new 
-            {
-                Rent_id = r.Rent_id,
-                Rent_date_From = r.Rent_date_From,
-                Rent_date_To = r.Rent_date_To,
-                Car_id = r.Car_id,
-                Car_name = r.Car.Car_Name,
-                Customer_id = r.Customer_Id,
-                Customer_name = r.Customer.Customer_firstName + " " + r.Customer.Customer_lastName,
-                Staff_id = r.Staff_Id,
-                Staff_name = r.Staff.Staff_Name,
-                ApprovedBy = r.ApprovedBy,
-                Discount = r.Discount,
-                Rent_Status = r.Rent_Status
-            });
+            var carRents = await (from r in dbContext.RentCar
+                join c in dbContext.Customers on r.Customer_Id equals c.Customer_Id
+                join s in dbContext.Staff on r.Staff_Id equals s.Staff_Id
+                join ca in dbContext.Cars on r.Car_id equals ca.Car_id
+                where r.Customer_Id.ToString() == id || r.Staff_Id.ToString() == id
+                select new
+                {
+                    Rent_id = r.Rent_id,
+                    Rent_date_From = r.Rent_date_From,
+                    Rent_date_To = r.Rent_date_To,
+                    Car_id = r.Car_id,
+                    Car_name = ca.Car_Name,
+                    Customer_id = r.Customer_Id,
+                    Customer_name = c.Customer_firstName + " " + c.Customer_lastName,
+                    Staff_id = r.Staff_Id,
+                    Staff_name = s.Staff_Name,
+                    ApprovedBy = r.ApprovedBy,
+                    Discount = r.Discount,
+                    Rent_Status = r.Rent_Status
+                }).ToListAsync();
 
-            return Ok(result);
+            return Ok(carRents);
         }
 
 

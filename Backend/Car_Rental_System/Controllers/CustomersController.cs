@@ -124,6 +124,10 @@ namespace Car_Rental_System.Controllers
 
             string fileName = documentFile.FileName;
             string fileExtension = Path.GetExtension(fileName);
+            //if (fileExtension != ".pdf" || fileExtension != ".png")
+            //{
+            //    return BadRequest("Choose PDF or PNG only.");
+            //}
 
             byte[] documentData = null;
             using (var ms = new MemoryStream())
@@ -135,8 +139,9 @@ namespace Car_Rental_System.Controllers
             // Update the customer's document in the database
             customer.Customer_Document = documentData;
             customer.Document_Type = fileExtension;
-            await dbContext.SaveChangesAsync();
 
+            
+            await dbContext.SaveChangesAsync();
             return Ok("Document added successfully.");
         }
 
@@ -230,6 +235,32 @@ namespace Car_Rental_System.Controllers
             return Ok("Password changed successfully.");
         }
 
+
+        //check if user is regular or not
+        [HttpGet("isRegular")]
+        public async Task<IActionResult> IsRegular()
+        {
+            string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return BadRequest("Token is empty.");
+            }
+            var customerId = getUserId.GetUserIdFromToken(tokenString);
+            var customer = await dbContext.Customers.FindAsync(Guid.Parse(customerId));
+            if (customer == null)
+            {
+                return NotFound("Customer not found.");
+            }
+
+            if (customer.IsRegular)
+            {
+                return Ok("Customer is regular.");
+            }
+            else
+            {
+                return Ok("Customer is not regular.");
+            }
+        }
         
 
 
