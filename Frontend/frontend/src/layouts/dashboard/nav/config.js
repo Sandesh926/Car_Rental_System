@@ -1,7 +1,7 @@
 // component
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+// import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
@@ -10,6 +10,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import ToysIcon from '@mui/icons-material/Toys';
 import CarCrashIcon from '@mui/icons-material/CarCrash';
 import TableViewIcon from '@mui/icons-material/TableView';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 const navConfig = [
   {
@@ -63,10 +64,15 @@ const navConfig = [
     icon: <CarCrashIcon />,
   },
   {
-    title: 'Not found',
-    path: '/404',
-    icon: <DoNotDisturbIcon />,
+    title: 'damage request form',
+    path: '/dashboard/damagerequest',
+    icon: <InsertDriveFileIcon />,
   },
+  // {
+  //   title: 'Not found',
+  //   path: '/404',
+  //   icon: <DoNotDisturbIcon />,
+  // },
 ];
 
 export default navConfig;

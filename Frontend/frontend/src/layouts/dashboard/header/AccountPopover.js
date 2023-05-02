@@ -62,7 +62,8 @@ export default function AccountPopover() {
   // }
   
   const handleDocuments = () => {
-  
+    setOpen(null);
+    navigate("/dashboard/adddocument");
   }
   
   const handlePassword = () => {
