@@ -20,6 +20,8 @@ namespace Car_Rental_System.Controllers
         {
             this.dbContext = dbContext;
         }
+
+
         [HttpGet]
         public async Task<IActionResult> GetCars()
         {
@@ -100,6 +102,31 @@ namespace Car_Rental_System.Controllers
                 return Ok(car);
             }
             return NotFound();
+        }
+
+
+        //add car image
+        [HttpPost("{carId}/image")]
+        public async Task<IActionResult> AddDocument(Guid carId, IFormFile documentFile)
+        {
+            var car = await dbContext.Cars.FindAsync(carId);
+            if (car == null)
+            {
+                return NotFound("Car not found.");
+            }
+
+            byte[] documentData = null;
+            using (var ms = new MemoryStream())
+            {
+                await documentFile.CopyToAsync(ms);
+                documentData = ms.ToArray();
+            }
+
+            // Update the car image in the database
+            car.Image = documentData;
+            await dbContext.SaveChangesAsync();
+
+            return Ok("Image added successfully.");
         }
     }
 }

@@ -127,8 +127,8 @@ namespace Car_Rental_System.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("RegularDiscount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("RegularDiscount")
+                        .HasColumnType("float");
 
                     b.Property<int>("Role_id")
                         .HasColumnType("int");
@@ -148,8 +148,8 @@ namespace Car_Rental_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("DamageCharge")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("DamageCharge")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("DamageDate")
                         .HasColumnType("datetime2");
@@ -185,6 +185,9 @@ namespace Car_Rental_System.Migrations
 
                     b.Property<string>("Customer_id")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Discount")
+                        .HasColumnType("float");
 
                     b.Property<string>("Rent_Status")
                         .IsRequired()

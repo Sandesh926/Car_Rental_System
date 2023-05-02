@@ -127,6 +127,7 @@ namespace Car_Rental_System.Controllers
 
 
         //get all damage cars customer
+        //Cusotmer sees their own car damages
         [HttpGet("getDamageCarsByCustomer")]
         public async Task<IActionResult> GetDamageCarsByCustomer()
         {
