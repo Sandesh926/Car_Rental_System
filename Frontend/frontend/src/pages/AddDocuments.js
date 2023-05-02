@@ -1,25 +1,22 @@
 import { Helmet } from 'react-helmet-async';
 import { Button, Container, Stack, Typography, Card, TextField } from '@mui/material';
 
-export default function ChangePassword() {
+export default function AddDocuments() {
   return (
     <>
       <Helmet>
-        <title> Change Password | Car Rental </title>
+        <title> Document | Car Rental </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Change Password
+            Add Driving License Or Citizenship Paper
           </Typography>
         </Stack>
         <Card style={{ padding: "20px", marginTop: "30px" }}>
-        <TextField fullWidth id="old-password" label="Old Password" variant="outlined" style={{marginBottom: '2vw'}} />
-        <TextField fullWidth id="new-password" label="New Password" variant="outlined" style={{marginBottom: '2vw'}}  />
-        <TextField fullWidth id="confirm-password" label="Confirm New Password" variant="outlined" style={{marginBottom: '2vw'}}  />
         <Button variant="contained">
-            Change Password
+            Add Document
           </Button>
         </Card>
       </Container>
