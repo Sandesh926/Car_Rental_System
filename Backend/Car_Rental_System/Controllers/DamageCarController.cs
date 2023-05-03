@@ -72,6 +72,9 @@ namespace Car_Rental_System.Controllers
                 await dbContext.DamageCar.AddAsync(damageCarObj);
                 await dbContext.SaveChangesAsync();
                 return Ok(damageCarObj);
+
+
+
             }
             catch (SecurityTokenException)
             {
