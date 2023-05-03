@@ -1,8 +1,30 @@
 import { Helmet } from 'react-helmet-async';
-import { Button, Container, Stack, Typography } from '@mui/material';
+import { Button, Container, Stack, Typography, Table, TableBody, TableHead, TableCell, Paper, TableContainer, TableRow } from '@mui/material';
 import Iconify from '../components/iconify'
+import {useState, useEffect} from "react";
 
 export default function CarDamage() {
+
+  const [damage, setDamage] = useState([]);
+
+  useEffect(() => {
+    fetch("https://localhost:7116/api/DamageCar/getDamageCars", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDamage(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -15,7 +37,33 @@ export default function CarDamage() {
             Car Damage
           </Typography>
         </Stack>
-        
+        <TableContainer component={Paper} sx={{ mt: 3 }}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="right">Damage Date</TableCell>
+                <TableCell align="right">Car Name</TableCell>
+                <TableCell align="right">Customer Name</TableCell>
+                <TableCell align="right">Staff Name</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {damage.map((data) => (
+                <TableRow
+                  key={data.rent_id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
+                >
+                  <TableCell align="right">{data.DamageDate}</TableCell>
+                  <TableCell align="right">{data.car_name}</TableCell>
+                  <TableCell align="right">{data.customer_name}</TableCell>
+                  <TableCell align="right">{data.staff_name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </>
   );
