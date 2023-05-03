@@ -141,52 +141,48 @@ namespace Car_Rental_System.Controllers
         {
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var id = getUserId.GetUserIdFromToken(tokenString);
-
-            var damageCars = await (from r in dbContext.DamageCar
-                join c in dbContext.Customers on r.Customer_Id equals c.Customer_Id
-                join s in dbContext.Staff on r.Staff_Id equals s.Staff_Id
-                join ca in dbContext.Cars on r.Car_id equals ca.Car_id
-                where c.Customer_Id.ToString() == id
-                select new
+            var damageCars = await dbContext.DamageCar
+                .Where(d => d.Customer_Id.ToString() == id)
+                .Select(d => new
                 {
-                    Damage_Id = r.Damage_id,
-                    DamageDate = r.DamageDate,
-                    car_id = ca.Car_id,
-                    car_name = ca.Car_Name,
-                    customer_id = c.Customer_Id,
-                    customer_name = c.Customer_firstName + " " + c.Customer_lastName,
-                    staff_id = s.Staff_Id,
-                    staff_name = s.Staff_Name,
-                    DamageCharge = r.DamageCharge,
-                    Charge_status = r.Charge_status
-                }).ToListAsync();
-
+                    d.Damage_id,
+                    d.DamageDate,
+                    d.Car_id,
+                    CarName = d.Cars.Car_Name,
+                    d.Customer_Id,
+                    CustomerName = $"{d.Customers.Customer_firstName} {d.Customers.Customer_lastName}",
+                    d.Staff_Id,
+                    StaffName = d.Staff.Staff_Name,
+                    d.DamageCharge,
+                    d.Charge_status
+                })
+                .ToListAsync();
+            
 
             return Ok(damageCars);
         }
+
 
 
         //get all damage cars
         [HttpGet("getDamageCars")]
         public async Task<IActionResult> GetDamageCars()
         {
-            var damageCars = await (from r in dbContext.DamageCar
-                join c in dbContext.Customers on r.Customer_Id equals c.Customer_Id
-                join s in dbContext.Staff on r.Staff_Id equals s.Staff_Id
-                join ca in dbContext.Cars on r.Car_id equals ca.Car_id
-                select new
+            var damageCars = await dbContext.DamageCar
+                .Select(d => new
                 {
-                    Damage_Id = r.Damage_id,
-                    DamageDate = r.DamageDate,
-                    car_id = ca.Car_id,
-                    car_name = ca.Car_Name,
-                    customer_id = c.Customer_Id,
-                    customer_name = c.Customer_firstName + " " + c.Customer_lastName,
-                    staff_id = s.Staff_Id,
-                    staff_name = s.Staff_Name,
-                    DamageCharge = r.DamageCharge,
-                    Charge_status = r.Charge_status
-                }).ToListAsync();
+                    d.Damage_id,
+                    d.DamageDate,
+                    d.Car_id,
+                    CarName = d.Cars.Car_Name,
+                    d.Customer_Id,
+                    CustomerName = $"{d.Customers.Customer_firstName} {d.Customers.Customer_lastName}",
+                    d.Staff_Id,
+                    StaffName = d.Staff.Staff_Name,
+                    d.DamageCharge,
+                    d.Charge_status
+                })
+                .ToListAsync();
 
             //if (damageCars == null || !damageCars.Any())
             //{
