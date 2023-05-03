@@ -4,6 +4,7 @@ import Car from "../../images/ferrari.png";
 import { Link as RouterLink } from "react-router-dom";
 import { TextField, Button, Typography, Grid, Link } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [firstName, setFirstName] = useState("");
@@ -16,8 +17,15 @@ function Register() {
 
   // const form = useRef();
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!firstName || !lastName || !email || !password || !phone || !address) {
+      alert("Please fill all the textfields!")
+      return
+    }
 
     fetch("https://localhost:7116/api/Customers", {
         method: "POST",
@@ -38,7 +46,8 @@ function Register() {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-            console.log("Customer Registered!");
+            alert("Customer Registered!");
+            navigate("/login")
             // form.current.reset();
         }).catch((error) => {
           console.log(error);

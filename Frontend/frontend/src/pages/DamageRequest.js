@@ -6,9 +6,55 @@ import {
   Typography,
   Card,
   TextField,
+  TableCell,
+  TableHead,
+  TableRow,
+  Table,
+  Paper,
+  TableContainer,
+  TableBody
 } from "@mui/material";
+import {useState, useEffect} from "react";
 
 export default function DamageRequest() {
+
+  const [damageData, setDamageData] = useState([])
+
+  const data = window.localStorage.getItem("token");
+  const obj = JSON.parse(data);
+
+  useEffect(() => {
+    fetch("https://localhost:7116/api/DamageCar/getDamageCarsByCustomer", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${obj.token}`,
+      },
+    })
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } else if (res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      }
+      return res.json();
+    })
+      .then((data) => {
+        setDamageData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  
   return (
     <>
       <Helmet>
@@ -23,30 +69,40 @@ export default function DamageRequest() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Damage Request Form
+            Manage Damage
           </Typography>
         </Stack>
         <Card style={{ padding: "20px", marginTop: "30px" }}>
-          <Typography variant="h6" style={{ marginBottom: "1vw" }}>
-            Damage Date
-          </Typography>
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            type="date"
-            fullWidth
-          />
-          <TextField
-          id="outlined-multiline-static"
-          label="Damage Description"
-          fullWidth
-          multiline
-          rows={4}
-          style={{marginTop: "2vw"}}
-        />
-          <Button variant="contained" style={{ marginTop: "1vw" }}>
-            Submit
-          </Button>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {/* <TableCell>Car ID</TableCell> */}
+                <TableCell align="right">Car Name</TableCell>
+                <TableCell align="right">Customer Name</TableCell>
+                <TableCell align="right">Charge Status</TableCell>
+                <TableCell align="right">Damage Date</TableCell>
+                <TableCell align="right">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {damageData.map((data) => (
+                <TableRow
+                  key={data.car_id}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
+                >
+                  <TableCell align="right">{data.carName}</TableCell>
+                  <TableCell align="right">{data.customerName}</TableCell>
+                  <TableCell align="right">{data.charge_status}</TableCell>
+                  <TableCell align="right">{data.damageDate}</TableCell>
+                  <TableCell align="right">{(data.charge_status == "Pending") ? <button className="btn btn-success btn-sm">Pay</button> : null}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         </Card>
       </Container>
     </>

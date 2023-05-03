@@ -28,7 +28,7 @@ export default function AddDocuments() {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": "*",
-        'Content-Type': 'multipart/form-data',
+        // 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${obj.token}`,
       },
       body: formData,
@@ -46,7 +46,7 @@ export default function AddDocuments() {
         alert("Document added successfully!")
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         alert(error.message);
       });
     console.log(selectedFile);

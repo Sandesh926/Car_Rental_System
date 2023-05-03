@@ -60,7 +60,7 @@ export default function Router() {
         { path: 'customerdetails', element: <CustomerDetails /> },
         { path: '/dashboard/changepassword', element: <ChangePassword /> },
         { path: '/dashboard/adddocument', element: <AddDocument /> },
-        { path: 'damagerequest', element: <DamageRequest /> },
+        { path: 'managedamage', element: <DamageRequest /> },
         { path: 'rentcars', element: <RentCars /> },
         { path: 'managerents', element: <ManageRents /> },
         { path: 'myrents', element: <MyRents /> },
