@@ -111,7 +111,7 @@ namespace Car_Rental_System.Controllers
 
         //add car image
         [HttpPost("{carId}/image")]
-        public async Task<IActionResult> AddDocument(Guid carId, IFormFile documentFile)
+        public async Task<IActionResult> AddImage(Guid carId, IFormFile documentFile)
         {
             var car = await dbContext.Cars.FindAsync(carId);
             if (car == null)
@@ -135,7 +135,7 @@ namespace Car_Rental_System.Controllers
 
 
         [HttpGet("{carId}/document")]
-        public async Task<IActionResult> GetDocument(Guid carId)
+        public async Task<IActionResult> GetImage(Guid carId)
         {
             var car = await dbContext.Cars.FindAsync(carId);
             if (car == null)
@@ -155,14 +155,14 @@ namespace Car_Rental_System.Controllers
 
         //add discount to car
         [HttpPut("addDiscount")]
-        public async Task<IActionResult> AddDiscount(double discount, string carId)
+        public async Task<IActionResult> AddDiscount(AddDiscount discount)
         {
-            var car = await dbContext.Cars.FindAsync(Guid.Parse(carId));
+            var car = await dbContext.Cars.FindAsync(Guid.Parse(discount.car_id));
             if (car == null)
             {
                 return NotFound("Car not found.");
             }
-            car.discount = discount;
+            car.discount = discount.discount;
             await dbContext.SaveChangesAsync();
             return Ok("Discount added successfully.");
         }
