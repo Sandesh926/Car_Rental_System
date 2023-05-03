@@ -142,11 +142,30 @@ namespace Car_Rental_System.Controllers
             string tokenString = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var id = getUserId.GetUserIdFromToken(tokenString);
 
-            var damageCars = await dbContext.DamageCar.Where(c => c.Customer_Id.ToString() == id).ToListAsync();
-            if (damageCars == null)
+            var damageCars = await (from r in dbContext.DamageCar
+                join c in dbContext.Customers on r.Customer_Id equals c.Customer_Id
+                join s in dbContext.Staff on r.Staff_Id equals s.Staff_Id
+                join ca in dbContext.Cars on r.Car_id equals ca.Car_id
+                where c.Customer_Id.ToString() == id
+                select new
+                {
+                    Damage_Id = r.Damage_id,
+                    DamageDate = r.DamageDate,
+                    car_id = ca.Car_id,
+                    car_name = ca.Car_Name,
+                    customer_id = c.Customer_Id,
+                    customer_name = c.Customer_firstName + " " + c.Customer_lastName,
+                    staff_id = s.Staff_Id,
+                    staff_name = s.Staff_Name,
+                    DamageCharge = r.DamageCharge,
+                    Charge_status = r.Charge_status
+                }).ToListAsync();
+
+            if (damageCars == null || !damageCars.Any())
             {
                 return BadRequest("No damage cars found for this customer.");
             }
+
             return Ok(damageCars);
         }
 
