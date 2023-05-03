@@ -25,5 +25,9 @@ namespace Car_Rental_System.Models
         public double? Discount { get; set; }
 
         public string Rent_Status { get; set; } = "Pending";
+
+        public Cars Cars { get; set; }
+        public Customers Customers { get; set; }
+        public Staff Staff { get; set; }
     }
 }

@@ -20,5 +20,9 @@ namespace Car_Rental_System.Models
         public double? DamageCharge { get; set; }
         public string Charge_status { get; set; } = "Waiting";
 
+        public Cars Cars { get; set; }
+        public Customers Customers { get; set; }
+        public Staff Staff { get; set; }
+
     }
 }

@@ -358,26 +358,27 @@ namespace Car_Rental_System.Controllers
                 return BadRequest("Token is empty.");
             }
             var id = getUserId.GetUserIdFromToken(tokenString);
-            var carRents = await (from r in dbContext.RentCar
-                join c in dbContext.Customers on r.Customer_Id equals c.Customer_Id
-                join s in dbContext.Staff on r.Staff_Id equals s.Staff_Id
-                join ca in dbContext.Cars on r.Car_id equals ca.Car_id
-                where r.Customer_Id.ToString() == id || r.Staff_Id.ToString() == id
-                select new
+
+            var carRents = await dbContext.RentCar
+                .Where(r => r.Customer_Id.ToString() == id)
+                .Select(r => new 
                 {
-                    Rent_id = r.Rent_id,
-                    Rent_date_From = r.Rent_date_From,
-                    Rent_date_To = r.Rent_date_To,
-                    Car_id = r.Car_id,
-                    Car_name = ca.Car_Name,
-                    Customer_id = r.Customer_Id,
-                    Customer_name = c.Customer_firstName + " " + c.Customer_lastName,
-                    Staff_id = r.Staff_Id,
-                    Staff_name = s.Staff_Name,
-                    ApprovedBy = r.ApprovedBy,
-                    Discount = r.Discount,
-                    Rent_Status = r.Rent_Status
-                }).ToListAsync();
+                    r.Rent_id,
+                    r.Rent_date_From,
+                    r.Rent_date_To,
+                    r.Car_id,
+                    CarName = r.Cars.Car_Name,
+                    r.Customer_Id,
+                    CustomerName = $"{r.Customers.Customer_firstName} {r.Customers.Customer_lastName}",
+                    r.Staff_Id,
+                    StaffName = r.Staff.Staff_Name,
+                    r.ApprovedBy,
+                    r.Discount,
+                    r.Rent_Status
+                })
+                .ToListAsync();
+
+
 
             return Ok(carRents);
         }
