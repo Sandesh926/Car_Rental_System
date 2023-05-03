@@ -48,7 +48,8 @@ export default function NavSection({ data = [], ...other }) {
         item.title !== "sales" &&
         item.title !== "track customer" &&
         item.title !== "car damage" &&
-        item.title !== "manage rents"
+        item.title !== "manage rents" &&
+        item.title !== "dashboard"
     );
   }
 
