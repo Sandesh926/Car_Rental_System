@@ -19,6 +19,9 @@ export default function ManageRents() {
   const [rentData, setRentData] = useState([]);
   const [carID, setCarID] = useState("");
 
+  const data = window.localStorage.getItem("token");
+  const obj = JSON.parse(data);
+
   useEffect(() => {
     fetch("https://localhost:7116/api/CarRent", {
       method: "GET",
@@ -42,9 +45,10 @@ export default function ManageRents() {
     fetch(`https://localhost:7116/accept/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${obj.token}`
       },
     })
       .then((res) => res.json())
@@ -62,9 +66,10 @@ export default function ManageRents() {
     fetch(`https://localhost:7116/reject/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${obj.token}`
       },
     })
       .then((res) => res.json())

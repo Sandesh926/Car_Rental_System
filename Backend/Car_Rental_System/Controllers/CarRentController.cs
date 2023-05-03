@@ -152,7 +152,7 @@ namespace Car_Rental_System.Controllers
 
 
         //cancel car rent
-        [HttpPut("{id}")]
+        [HttpPut("/cancel/{id}")]
         public async Task<IActionResult> CancelCarRent(string id)
         {
             var carRent = await dbContext.RentCar.FirstOrDefaultAsync(c => c.Rent_id.ToString() == id);
@@ -216,7 +216,7 @@ namespace Car_Rental_System.Controllers
 
             //check if current time is between 9am and 5pm
             var time = DateTime.Now;
-            if (time.Hour <= 9 || time.Hour >= 17)
+            if (time.Hour <= 9 && time.Hour >= 17)
             {
                 return BadRequest("This operation can only be done between 9am to 5pm.");
             }
@@ -278,7 +278,7 @@ namespace Car_Rental_System.Controllers
         public async Task<IActionResult> RejectCarRent(string car_id)
         {
             var time = DateTime.Now;
-            if (time.Hour <= 9 || time.Hour >= 17)
+            if (time.Hour <= 9 && time.Hour >= 17)
             {
                 return BadRequest("This operation can only be done between 9am to 5pm.");
             }
