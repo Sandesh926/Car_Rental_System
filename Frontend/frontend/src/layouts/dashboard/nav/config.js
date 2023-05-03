@@ -80,8 +80,8 @@ const navConfig = [
     icon: <CarRentalIcon />,
   },
   {
-    title: 'damage request form',
-    path: '/dashboard/damagerequest',
+    title: 'manage damage',
+    path: '/dashboard/managedamage',
     icon: <InsertDriveFileIcon />,
   },
   // {
