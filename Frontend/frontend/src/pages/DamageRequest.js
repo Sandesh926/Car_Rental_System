@@ -15,6 +15,8 @@ import {
   TableBody
 } from "@mui/material";
 import {useState, useEffect} from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function DamageRequest() {
 
@@ -51,10 +53,10 @@ export default function DamageRequest() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
-  
   return (
     <>
       <Helmet>
@@ -104,6 +106,19 @@ export default function DamageRequest() {
           </Table>
         </TableContainer>
         </Card>
+        <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        limit={1}
+      />
       </Container>
     </>
   );

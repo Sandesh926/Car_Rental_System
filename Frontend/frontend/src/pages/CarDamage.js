@@ -1,7 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { Button, Container, Stack, Typography, Table, TableBody, TableHead, TableCell, Paper, TableContainer, TableRow } from '@mui/material';
 import Iconify from '../components/iconify'
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CarDamage() {
 
@@ -22,6 +24,7 @@ export default function CarDamage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
@@ -64,6 +67,19 @@ export default function CarDamage() {
             </TableBody>
           </Table>
         </TableContainer>
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={1}
+        />
       </Container>
     </>
   );
