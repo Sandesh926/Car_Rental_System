@@ -79,7 +79,7 @@ function Login() {
           window.localStorage.setItem("token", JSON.stringify(data));
           window.localStorage.setItem(`${role}loggedIn`, true);
           window.localStorage.setItem("role", role);
-          window.location.href = "./dashboard/app";
+          window.location.href = "./dashboard/rentcars";
         })
         .catch((error) => {
           console.log(error);
