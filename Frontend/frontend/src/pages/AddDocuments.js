@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import License from "../images/Driving License.png"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AddDocuments() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -16,19 +18,28 @@ export default function AddDocuments() {
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
-  
+
   const data = window.localStorage.getItem("token");
   const obj = JSON.parse(data);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+
+    if (!selectedFile) {
+      toast.error("Please upload your document!")
+      return
+    }
+
     const formData = new FormData();
     formData.append("documentFile", selectedFile);
     fetch("https://localhost:7116/api/Customers/document", {
       method: "POST",
       headers: {
+
         "Access-Control-Allow-Origin": "*",
-        // 'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
+        "Content-Type": "application/json",
+        Accept: "application/json",
         Authorization: `Bearer ${obj.token}`,
       },
       body: formData,
@@ -43,13 +54,13 @@ export default function AddDocuments() {
       })
       .then((data) => {
         console.log(data);
-        alert("Document added successfully!")
+        toast.success("Document added successfully!")
       })
       .catch((error) => {
         // console.log(error);
-        alert(error.message);
+        toast.error("You already have uploaded document!");
       });
-    console.log(selectedFile);
+    // console.log(selectedFile);
   };
 
   return (
@@ -72,12 +83,25 @@ export default function AddDocuments() {
         <Card style={{ padding: "20px", marginTop: "30px" }}>
           <form onSubmit={handleFormSubmit}>
             <input type="file" accept=".png,.pdf" onChange={handleFileChange} className="form-control" />
-            <button type="submit" className="btn btn-primary" style={{marginTop: "1vw"}}>Add Document</button>
+            <button type="submit" className="btn btn-primary" style={{ marginTop: "1vw" }}>Add Document</button>
           </form>
         </Card>
-        <Card style={{ padding: "20px", marginTop: "30px" }}>
-          <img src={License} style={{height: "20vw"}} />
-        </Card>
+        {/* <Card style={{ padding: "20px", marginTop: "30px" }}>
+          <img src={License} style={{ height: "20vw" }} />
+        </Card> */}
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={1}
+        />
       </Container>
     </>
   );
