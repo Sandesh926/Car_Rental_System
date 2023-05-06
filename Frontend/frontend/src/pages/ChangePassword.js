@@ -8,6 +8,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useState, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ChangePassword() {
   const [oldPass, setOldPass] = useState("");
@@ -24,6 +26,11 @@ export default function ChangePassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!oldPass || !newPass) {
+      toast.error("Please fill all the textfields!");
+      return
+    }
 
     if (isCustomer) {
       fetch("https://localhost:7116/api/Customers/changePassword", {
@@ -53,11 +60,11 @@ export default function ChangePassword() {
         })
         .then((data) => {
           console.log(data);
-          alert("Password changed successfully!");
+          toast.success("Password changed successfully!");
         })
         .catch((error) => {
           console.log(error);
-          alert(error);
+          toast.error(error.toString);
         });
     } else if (isAdmin) {
       fetch("https://localhost:7116/api/Admin/changePassword", {
@@ -87,11 +94,11 @@ export default function ChangePassword() {
         })
         .then((data) => {
           console.log(data);
-          alert("Password changed successfully!");
+          toast.success("Password changed successfully!");
         })
         .catch((error) => {
           console.log(error);
-          alert(error);
+          toast.error(error.toString());
         });
     } else if (isStaff) {
       fetch("https://localhost:7116/api/Staff/changePassword", {
@@ -121,11 +128,11 @@ export default function ChangePassword() {
         })
         .then((data) => {
           console.log(data);
-          alert("Password changed successfully!");
+          toast.success("Password changed successfully!");
         })
         .catch((error) => {
           console.log(error);
-          alert(error);
+          toast.error(error.toString());
         });
     }
   };
@@ -170,6 +177,19 @@ export default function ChangePassword() {
             </Button>
           </form>
         </Card>
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={1}
+        />
       </Container>
     </>
   );

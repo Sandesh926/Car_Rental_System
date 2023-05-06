@@ -2,35 +2,13 @@ import { useState, useEffect } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
-// mocks_
-import account from '../../../_mock/account';
 
 import AvatarImg from './images/avatar.webp'
 
 import { useNavigate } from "react-router-dom";
 
-
-
-
-
-// ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
-
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-
-  // const [adminRole, setAdminRole] = useState("");
-  // const [staffRole, setStaffRole] = useState("");
-
-  // useEffect(() => {
-  //   const role = window.localStorage.getItem("role");
-  //   if (role === "admin") {
-  //     setAdminRole(role);
-  //   } else if (role === "staff") {
-  //     setStaffRole(role);
-  //   }
-  // }, []);
 
   const data = window.localStorage.getItem("token");
   const obj = JSON.parse(data);
@@ -56,19 +34,15 @@ export default function AccountPopover() {
   const handleHome = () => {
 
   }
-  
-  // const handleProfile = () => {
-  
-  // }
-  
+
   const handleDocuments = () => {
     setOpen(null);
     navigate("/dashboard/adddocument");
   }
-  
+
   const handlePassword = () => {
     setOpen(null);
-      navigate("/dashboard/changepassword");
+    navigate("/dashboard/changepassword");
   }
 
   return (
@@ -114,10 +88,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {/* {adminRole ? obj.admin_name : obj.name} */}{obj.name}
+            {obj.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {/* {adminRole ? obj.admin_email : obj.email} */}{obj.email}
+            {obj.email}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {`Role: ${objRole}`}
@@ -127,25 +101,19 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Stack sx={{ p: 1 }}>
-        <MenuItem icon="eva:home-fill" onClick={handleHome}>
+          <MenuItem icon="eva:home-fill" onClick={handleHome}>
             Home
           </MenuItem>
-          {/* <MenuItem icon="eva:person-fill" onClick={handleProfile}>
-            Profile
-          </MenuItem> */}
-          <MenuItem icon="eva:person-fill" onClick={handleDocuments}>
+          {(objRole == "admin") ? null :  <MenuItem icon="eva:person-fill" onClick={handleDocuments}>
             Add Documents
-          </MenuItem>
+          </MenuItem>}
           <MenuItem icon="eva:person-fill" onClick={handlePassword}>
             Change Password
           </MenuItem>
-        </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+          <MenuItem onClick={handleLogout}>
           Logout
         </MenuItem>
+        </Stack>
       </Popover>
     </>
   );
