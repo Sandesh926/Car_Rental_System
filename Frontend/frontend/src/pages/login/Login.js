@@ -14,6 +14,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useState, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -33,6 +35,18 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!email || !password || !role) {
+      toast.error("Please fill all the textfields!");
+      return
+    }
+
+    // Check if email is in valid format
+    const emailPattern = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+    if (!emailPattern.test(email)) {
+      toast.error("Please enter a valid email address!");
+      return;
+    }
 
     if (role === "customer") {
       fetch("https://localhost:7116/api/Customers/login", {
@@ -61,6 +75,7 @@ function Login() {
         })
         .then((data) => {
           console.log(data);
+          toast.success("Login Successful!");
           window.localStorage.setItem("token", JSON.stringify(data));
           window.localStorage.setItem(`${role}loggedIn`, true);
           window.localStorage.setItem("role", role);
@@ -68,7 +83,8 @@ function Login() {
         })
         .catch((error) => {
           console.log(error);
-          alert(error);
+          toast.error(error.toString());
+          return
         });
     } else if (role === "admin") {
       fetch("https://localhost:7116/api/Admin/login", {
@@ -97,6 +113,7 @@ function Login() {
         })
         .then((data) => {
           console.log(data);
+          toast.success("Login Successful!");
           window.localStorage.setItem("token", JSON.stringify(data));
           window.localStorage.setItem(`${role}loggedIn`, true);
           window.localStorage.setItem("role", role);
@@ -104,7 +121,7 @@ function Login() {
         })
         .catch((error) => {
           console.log(error);
-          alert(error);
+          toast.error(error.toString());
         });
     } else if (role === "staff") {
       fetch("https://localhost:7116/api/Staff/login", {
@@ -133,14 +150,15 @@ function Login() {
         })
         .then((data) => {
           console.log(data);
+          toast.success("Login Successful!");
           window.localStorage.setItem("token", JSON.stringify(data));
           window.localStorage.setItem(`${role}loggedIn`, true);
           window.localStorage.setItem("role", role);
           window.location.href = "./dashboard/app";
         })
         .catch((error) => {
+          toast.error(error.toString());
           console.log(error);
-          alert(error);
         });
     }
   };
@@ -209,6 +227,19 @@ function Login() {
           </Grid>
         </Grid>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        limit={1}
+      />
     </section>
   );
 }
