@@ -5,6 +5,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { TextField, Button, Typography, Grid, Link } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const [firstName, setFirstName] = useState("");
@@ -23,35 +25,43 @@ function Register() {
     e.preventDefault();
 
     if (!firstName || !lastName || !email || !password || !phone || !address) {
-      alert("Please fill all the textfields!")
+      toast.error("Please fill all the textfields!");
       return
     }
 
+    // Check if email is in valid format
+    const emailPattern = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+    if (!emailPattern.test(email)) {
+      toast.error("Please enter a valid email address!");
+      return;
+    }
+
     fetch("https://localhost:7116/api/Customers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          customer_firstName: firstName,
-          customer_lastName: lastName,
-          customer_Email: email,
-          password,
-          customer_Phone: phone,
-          customer_Address: address,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-            alert("Customer Registered!");
-            navigate("/login")
-            // form.current.reset();
-        }).catch((error) => {
-          console.log(error);
-        });
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        customer_firstName: firstName,
+        customer_lastName: lastName,
+        customer_Email: email,
+        password,
+        customer_Phone: phone,
+        customer_Address: address,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        toast.success("Customer Registered!");
+        navigate("/login")
+        // form.current.reset();
+      }).catch((error) => {
+        console.log(error);
+        toast.error(error.toString());
+      });
   }
 
   return (
@@ -63,7 +73,7 @@ function Register() {
           Sign Up
         </Typography>
         <Grid container spacing={3}>
-        {/* <form ref={form}> */}
+          {/* <form ref={form}> */}
           <Grid item xs={12} sm={6}>
             <TextField
               id="first-name"
@@ -142,6 +152,19 @@ function Register() {
           </Grid>
         </Grid>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        limit={1}
+      />
     </section>
   );
 }
