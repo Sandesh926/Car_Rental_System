@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import Iconify from "../components/iconify";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ManageRents() {
   const [rentData, setRentData] = useState([]);
@@ -22,24 +24,6 @@ export default function ManageRents() {
   const data = window.localStorage.getItem("token");
   const obj = JSON.parse(data);
 
-  useEffect(() => {
-    fetch("https://localhost:7116/api/CarRent", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setRentData(data);
-        // console.log(datas);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const handleAccept = (id) => {
     fetch(`https://localhost:7116/accept/${id}`, {
@@ -51,14 +35,21 @@ export default function ManageRents() {
         Authorization: `Bearer ${obj.token}`
       },
     })
-      .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
       .then((data) => {
         // setRentData(data);
-        alert(data);
+        toast.success(data.toString());
         // console.log(datas);
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.toString());
       });
   };
 
@@ -72,16 +63,54 @@ export default function ManageRents() {
         Authorization: `Bearer ${obj.token}`
       },
     })
-      .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
       .then((data) => {
         // setRentData(data);
-        alert(data);
+        toast.success(data.toString());
+        // console.log(datas);
+      })
+      .catch((error) => {
+        toast.error(error.toString());
+      });
+  };
+
+
+  
+
+  useEffect(() => {
+    fetch("https://localhost:7116/api/CarRent", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
+      .then((data) => {
+        setRentData(data);
         // console.log(datas);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }, [handleAccept, handleReject]);
+
+  
 
   return (
     <>
@@ -155,6 +184,21 @@ export default function ManageRents() {
             </TableBody>
           </Table>
         </TableContainer>
+
+        <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        limit={1}
+      />
+
       </Container>
     </>
   );

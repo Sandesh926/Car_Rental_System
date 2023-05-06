@@ -27,7 +27,13 @@ export default function NavSection({ data = [], ...other }) {
   let filteredData = data;
 
   if (isAdmin) {
-    filteredData = data.filter((item) => item.title !== "damage request form" && item.title !== "rent cars" );
+    filteredData = data.filter
+    ((item) => 
+    item.title !== "damage request form" && 
+    item.title !== "rent cars" &&
+    item.title !== "my rents"
+
+    );
   } else if (isStaff) {
     filteredData = data.filter(
       (item) =>

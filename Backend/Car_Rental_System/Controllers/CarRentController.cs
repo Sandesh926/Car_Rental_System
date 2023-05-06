@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace Car_Rental_System.Controllers
 {
@@ -216,7 +217,7 @@ namespace Car_Rental_System.Controllers
 
             //check if current time is between 9am and 5pm
             var time = DateTime.Now;
-            if (time.Hour <= 9 && time.Hour >= 17)
+            if (time.Hour <= 9 || time.Hour >= 17)
             {
                 return BadRequest("This operation can only be done between 9am to 5pm.");
             }
@@ -234,9 +235,10 @@ namespace Car_Rental_System.Controllers
                 return NotFound();
             }
             var staff = await dbContext.Staff.FirstOrDefaultAsync(c => c.Staff_Id.ToString() == staff_id);
-            if (staff == null)
+            var admin = await dbContext.Admin.FirstOrDefaultAsync(c => c.Admin_id.ToString() == staff_id);
+            if (staff == null && admin == null)
             {   
-                return BadRequest("Staff does not exist in the database.");
+                return BadRequest("Staff/Admin does not exist in the database.");
             }
 
             if (!carRentObj.Customer_Id.ToString().IsNullOrEmpty())
@@ -261,7 +263,14 @@ namespace Car_Rental_System.Controllers
             //change car status to rented
             var car = await dbContext.Cars.FirstOrDefaultAsync(c => c.Car_id == carRentObj.Car_id);
             car.Availability_Status = "Rented";
-            carRentObj.ApprovedBy = staff.Staff_Name;
+            if(staff!= null)
+            {
+                carRentObj.ApprovedBy = staff.Staff_Name;
+            }
+            else
+            {
+                carRentObj.ApprovedBy = admin.Admin_name;
+            }
             carRentObj.Rent_Status = "Accepted";
             await dbContext.SaveChangesAsync();
             return Ok(carRentObj);
@@ -278,7 +287,7 @@ namespace Car_Rental_System.Controllers
         public async Task<IActionResult> RejectCarRent(string car_id)
         {
             var time = DateTime.Now;
-            if (time.Hour <= 9 && time.Hour >= 17)
+            if (time.Hour <= 9 || time.Hour >= 17)
             {
                 return BadRequest("This operation can only be done between 9am to 5pm.");
             }
@@ -388,13 +397,22 @@ namespace Car_Rental_System.Controllers
         [HttpGet("/frequentlyRented")]
         public async Task<IActionResult> GetFrequentlyRentedCars()
         {
-            var frequentlyRentedCars = await (from c in dbContext.Cars
-                join rc in dbContext.RentCar on c.Car_id equals rc.Car_id
-                group c by c.Car_id into g
-                orderby g.Count() descending
-                select g.First())
+            var frequentlyRentedCars = await dbContext.RentCar
+                .Where(r => r.Rent_Status == "Accepted")
+                .GroupBy(r => r.Car_id)
+                .Select(r => new
+                {
+                    car_Name = r.FirstOrDefault().Cars.Car_Name,
+                    car_Model = r.FirstOrDefault().Cars.Car_Model,
+                    year = r.FirstOrDefault().Cars.Year,
+                    color = r.FirstOrDefault().Cars.Color,
+                    availability_Status = r.FirstOrDefault().Cars.Availability_Status,
+                    rent_Price = r.FirstOrDefault().Cars.Rent_Price,
+                    Count = r.Count()
+                })
+                .OrderByDescending(r => r.Count)
                 .ToListAsync();
-
+            Console.WriteLine(JsonConvert.SerializeObject(frequentlyRentedCars));
             return Ok(frequentlyRentedCars);
         }
 
@@ -403,14 +421,22 @@ namespace Car_Rental_System.Controllers
         [HttpGet("/neverRented")]
         public async Task<IActionResult> GetNeverRentedCars()
         {
-            var neverRentedCars = await (from c in dbContext.Cars
-                join rc in dbContext.RentCar on c.Car_id equals rc.Car_id into gj
-                from subrc in gj.DefaultIfEmpty()
-                where subrc == null
-                select c)
+            var reverRentedCars = await dbContext.Cars
+                .Where(c => !dbContext.RentCar.Any(r => r.Car_id == c.Car_id))
+                .Select(c => new
+                {
+                    c.Car_id,
+                    c.Car_Name,
+                    c.Car_Model,
+                    c.Year,
+                    c.Color,
+                    c.Availability_Status,
+                    c.Rent_Price
+
+                })
                 .ToListAsync();
 
-            return Ok(neverRentedCars);
+            return Ok(reverRentedCars);
         }
 
 

@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { useState, useEffect, useCallback } from "react";
 import { Button, Modal } from "antd";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RentCars() {
   const [datas, setDatas] = useState([]);
@@ -97,11 +99,11 @@ export default function RentCars() {
         return res.json();
       })
       .then((data) => {
-        alert("Car rented successfully");
+        toast.success("Car rented successfully");
       })
       .catch((error) => {
         console.log(error);
-        alert(error);
+        toast.error(error.toString());
       });
   };
 
@@ -206,6 +208,21 @@ export default function RentCars() {
             </div>
           </Card>
         ))}
+
+<ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        limit={1}
+      />
+
       </Container>
     </>
   );

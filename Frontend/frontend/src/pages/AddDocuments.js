@@ -35,10 +35,7 @@ export default function AddDocuments() {
     fetch("https://localhost:7116/api/Customers/document", {
       method: "POST",
       headers: {
-
         "Access-Control-Allow-Origin": "*",
-        'Content-Type': 'multipart/form-data',
-        "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: `Bearer ${obj.token}`,
       },
@@ -57,8 +54,8 @@ export default function AddDocuments() {
         toast.success("Document added successfully!")
       })
       .catch((error) => {
-        // console.log(error);
-        toast.error("You already have uploaded document!");
+        console.log(error);
+        toast.error(error.toString());
       });
     // console.log(selectedFile);
   };

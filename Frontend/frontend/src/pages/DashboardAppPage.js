@@ -86,6 +86,9 @@ export default function DashboardAppPage() {
       .then((res) => res.json())
       .then((data) => {
         setFrequently(data);
+        // data.forEach((element) => {
+        //   console.log("Count: " + element.Count);
+        // });
       })
       .catch((error) => {
         console.log(error);
@@ -156,10 +159,11 @@ export default function DashboardAppPage() {
                 <TableCell align="right">Color</TableCell>
                 <TableCell align="right">Rent Price</TableCell>
                 <TableCell align="right">Availability Status</TableCell>
+                <TableCell align="right">Total Rents</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {never.map((data) => (
+              {frequently.map((data) => (
                 <TableRow
                   key={data.rent_id}
                   sx={{
@@ -172,6 +176,7 @@ export default function DashboardAppPage() {
                   <TableCell align="right">{data.color}</TableCell>
                   <TableCell align="right">{data.rent_Price}</TableCell>
                   <TableCell align="right">{data.availability_Status}</TableCell>
+                  <TableCell align="right">{data.count}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -194,7 +199,7 @@ export default function DashboardAppPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {frequently.map((data) => (
+              {never.map((data) => (
                 <TableRow
                   key={data.rent_id}
                   sx={{

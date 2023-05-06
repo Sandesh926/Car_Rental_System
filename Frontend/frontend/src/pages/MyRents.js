@@ -16,6 +16,8 @@ import {
 import Iconify from "../components/iconify";
 import { useState, useEffect } from "react";
 import { Button, Modal } from "antd";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function MyRents() {
   const [rentData, setRentData] = useState([]);
@@ -25,25 +27,6 @@ export default function MyRents() {
   const data = window.localStorage.getItem("token");
   const obj = JSON.parse(data);
 
-  useEffect(() => {
-    fetch("https://localhost:7116/myrents", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${obj.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setRentData(data);
-        // console.log(datas);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const handleCancel = (id) => {
     fetch(`https://localhost:7116/cancel/${id}`, {
@@ -55,16 +38,89 @@ export default function MyRents() {
         Authorization: `Bearer ${obj.token}`,
       },
     })
-      .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
       .then((data) => {
         // setRentData(data);
-        alert("Successfully Cancled!");
+        toast.success("Successfully Cancled!");
+        // console.log(datas);
+      })
+      .catch((error) => {
+        toast.error(error.toString());
+      });
+  };
+
+  const handleOk = () => {
+    fetch("https://localhost:7116/api/DamageCar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${obj.token}`
+      },
+      body: JSON.stringify({
+        damageDate: damageDate,
+        car_id: rentID
+      }),
+    })
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
+      .then((data) => {
+        console.log(data);
+        toast.success("Damage Request Submitted!");
+        getRent();
+        // form.current.reset();
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+    setIsModalOpen(false);
+  };
+
+
+  useEffect(() => {
+    getRent();
+  }, []);
+
+  const getRent = () =>{
+    fetch("https://localhost:7116/myrents", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${obj.token}`,
+      },
+    })
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
+      .then((data) => {
+        setRentData(data);
         // console.log(datas);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
   const handlePay = (id) => {
     const config = "744e7c5a240f401e95551a71d782da81";
@@ -79,7 +135,14 @@ export default function MyRents() {
         Authorization: `Bearer ${obj.token}`,
       },
     })
-      .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
       .then((data) => {
         // setRentData(data);
         // alert("Payment Successfully!");
@@ -104,7 +167,14 @@ export default function MyRents() {
         purchase_order_name: "Book Car",
       }),
     })
-      .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 400 || res.status === 401 || res.status === 402 || res.status !== 200) {
+        return res.json().then((data) => {
+          throw new Error(data);
+        });
+      } 
+      return res.json();
+    })
       .then((data) => {
         console.log(data);
         window.location.href = data.payment_url;
@@ -120,34 +190,11 @@ export default function MyRents() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    fetch("https://localhost:7116/api/DamageCar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${obj.token}`
-      },
-      body: JSON.stringify({
-        damageDate: damageDate,
-        car_id: rentID
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        alert("Damage Request Submitted!");
-        // form.current.reset();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setIsModalOpen(false);
-  };
+  
 
   const handleCancels = () => {
     setIsModalOpen(false);
+    getRent();
   };
 
   const handleDamage = (id) => {
@@ -179,7 +226,6 @@ export default function MyRents() {
                 {/* <TableCell>Car ID</TableCell> */}
                 <TableCell align="right">Car Name</TableCell>
                 <TableCell align="right">Customer Name</TableCell>
-                <TableCell align="right">Staff Name</TableCell>
                 <TableCell align="right">Approved By</TableCell>
                 <TableCell align="right">Rent Status</TableCell>
                 <TableCell align="right">Discount</TableCell>
@@ -195,8 +241,9 @@ export default function MyRents() {
                   }}
                 >
                   <TableCell align="right">{data.carName}</TableCell>
-                  <TableCell align="right">{data.customerName}</TableCell>
-                  <TableCell align="right">{data.staffName}</TableCell>
+                  {data.customerName === null ? (<TableCell align="right">{data.staffName}</TableCell>):(<TableCell align="right">{data.customerName}</TableCell>)}
+                  
+                  
                   <TableCell align="right">{data.approvedBy}</TableCell>
                   <TableCell align="right">{data.rent_Status}</TableCell>
                   <TableCell align="right">{data.discount}</TableCell>
@@ -260,6 +307,20 @@ export default function MyRents() {
             </Card>
           </Modal>
         </TableContainer>
+
+        <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        limit={1}
+      />
       </Container>
     </>
   );

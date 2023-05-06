@@ -57,6 +57,23 @@ export default function CarInventory() {
     setIsModalOpen(false);
   };
 
+  const handleDelete = (id) => {
+    fetch(`https://localhost:7116/api/Cars/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Car Deleted!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   const form = useRef();
 
   useEffect(() => {
@@ -76,25 +93,9 @@ export default function CarInventory() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [handleOk, handleDelete]);
 
-  const handleDelete = (id) => {
-    fetch(`https://localhost:7116/api/Cars/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Car Deleted!");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  
 
   return (
     <>
