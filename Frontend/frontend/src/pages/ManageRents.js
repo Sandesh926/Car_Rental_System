@@ -107,6 +107,7 @@ export default function ManageRents() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, [handleAccept, handleReject]);
 

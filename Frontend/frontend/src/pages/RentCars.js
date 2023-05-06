@@ -52,6 +52,7 @@ export default function RentCars() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
@@ -64,7 +65,7 @@ export default function RentCars() {
 
   const isStaff = window.localStorage.getItem("staffloggedIn");
   const isCustomer = window.localStorage.getItem("customerloggedIn");
-  
+
   const [isRegular, setIsRegular] = useState(false);
 
   const [carID, setCarID] = useState("");
@@ -95,7 +96,7 @@ export default function RentCars() {
           return res.json().then((data) => {
             throw new Error(data);
           });
-        } 
+        }
         return res.json();
       })
       .then((data) => {
@@ -112,7 +113,7 @@ export default function RentCars() {
     setCarID(id);
     console.log(carID);
   }, [showModal]);
-  
+
   useEffect(() => {
     fetch("https://localhost:7116/api/Customers/isRegular", {
       method: "GET",
@@ -130,6 +131,7 @@ export default function RentCars() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
@@ -167,7 +169,7 @@ export default function RentCars() {
                   <br />
                   Color: {data.color}
                   <br />
-                  Rent Price: Rs. {isStaff ? (data.rent_Price - 0.25 * data.rent_Price ): (isRegular) ? (data.rent_Price - 0.1 * data.rent_Price) : (data.rent_Price )}
+                  Rent Price: Rs. {isStaff ? (data.rent_Price - 0.25 * data.rent_Price) : (isRegular) ? (data.rent_Price - 0.1 * data.rent_Price) : (data.rent_Price)}
                   <br />
                   Status: {data.availability_Status}
                 </p>
@@ -209,19 +211,19 @@ export default function RentCars() {
           </Card>
         ))}
 
-<ToastContainer
-        position="top-center"
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        limit={1}
-      />
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={1}
+        />
 
       </Container>
     </>

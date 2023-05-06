@@ -119,6 +119,7 @@ export default function MyRents() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }
 
@@ -150,6 +151,7 @@ export default function MyRents() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
         return;
       });
 
@@ -181,6 +183,7 @@ export default function MyRents() {
       })
       .catch((error) => {
         console.error(error);
+        toast.error(error.toString())
       });
   };
 

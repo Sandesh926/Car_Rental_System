@@ -18,7 +18,9 @@ import {
 
 import Iconify from "../components/iconify";
 import { Modal } from "antd";
-import { useRef, useEffect} from "react";
+import { useRef, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminPage() {
   const [open, setOpen] = useState(null);
@@ -38,28 +40,29 @@ export default function AdminPage() {
   const handleOk = (e) => {
     e.preventDefault();
     fetch("https://localhost:7116/api/Admin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          admin_id: adminId,
-          admin_name: adminName,
-          admin_password: adminPassword,
-          admin_email: adminEmail,
-          role_id: roleId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-            console.log("Admin Registered!");
-            form.current.reset();
-        }).catch((error) => {
-          console.log(error);
-        });
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        admin_id: adminId,
+        admin_name: adminName,
+        admin_password: adminPassword,
+        admin_email: adminEmail,
+        role_id: roleId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        toast.success("Admin Registered!");
+        form.current.reset();
+      }).catch((error) => {
+        console.log(error);
+        toast.error(error.toString());
+      });
     setIsModalOpen(false);
   };
 
@@ -91,6 +94,7 @@ export default function AdminPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString());
       });
   }, [handleOk]);
 
@@ -123,81 +127,94 @@ export default function AdminPage() {
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
-            
+
           >
             <form ref={form}>
-            <TextField
-              id="admin_id"
-              label="Admin ID"
-              variant="outlined"
-              style={{marginTop: "1vw", marginRight: "1vw"}}
-              onChange={(e) => setAdminId(e.target.value)}
-            />
-            <TextField
-              id="admin-name"
-              label="Admin Name"
-              variant="outlined"
-              style={{marginTop: "1vw"}}
-              onChange={(e) => setAdminName(e.target.value)}
-            />
-            <TextField
-              id="admin-password"
-              label="Admin Password"
-              variant="outlined"
-              type = "password"
-              style={{marginTop: "1vw", marginRight: "1vw"}}
-              onChange={(e) => setAdminPassword(e.target.value)}
-            />
-            <TextField
-              id="admin-email"
-              label="Admin Email"
-              variant="outlined"
-              style={{marginTop: "1vw"}}
-              onChange={(e) => setAdminEmail(e.target.value)}
+              <TextField
+                id="admin_id"
+                label="Admin ID"
+                variant="outlined"
+                style={{ marginTop: "1vw", marginRight: "1vw" }}
+                onChange={(e) => setAdminId(e.target.value)}
+              />
+              <TextField
+                id="admin-name"
+                label="Admin Name"
+                variant="outlined"
+                style={{ marginTop: "1vw" }}
+                onChange={(e) => setAdminName(e.target.value)}
+              />
+              <TextField
+                id="admin-password"
+                label="Admin Password"
+                variant="outlined"
+                type="password"
+                style={{ marginTop: "1vw", marginRight: "1vw" }}
+                onChange={(e) => setAdminPassword(e.target.value)}
+              />
+              <TextField
+                id="admin-email"
+                label="Admin Email"
+                variant="outlined"
+                style={{ marginTop: "1vw" }}
+                onChange={(e) => setAdminEmail(e.target.value)}
 
-            />
-            <TextField
-              id="admin-roleid"
-              label="Role ID"
-              variant="outlined"
-              style={{marginTop: "1vw"}}
-              onChange={(e) => setRoleId(e.target.value)}
-            />
+              />
+              <TextField
+                id="admin-roleid"
+                label="Role ID"
+                variant="outlined"
+                style={{ marginTop: "1vw" }}
+                onChange={(e) => setRoleId(e.target.value)}
+              />
             </form>
           </Modal>
         </Stack>
 
         <Card>
-        <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Admin ID</TableCell>
-                    <TableCell align="right">Admin Name</TableCell>
-                    <TableCell align="right">Admin Email</TableCell>
-                    <TableCell align="right">Role ID</TableCell>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Admin ID</TableCell>
+                  <TableCell align="right">Admin Name</TableCell>
+                  <TableCell align="right">Admin Email</TableCell>
+                  <TableCell align="right">Role ID</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {datas.map((data) => (
+                  <TableRow
+                    key={data.admin_id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {data.admin_id}
+                    </TableCell>
+                    <TableCell align="right">{data.admin_name}</TableCell>
+                    <TableCell align="right">{data.admin_email}</TableCell>
+                    <TableCell align="right">{data.role_id}</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {datas.map((data) => (
-                    <TableRow
-                      key={data.admin_id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {data.admin_id}
-                      </TableCell>
-                      <TableCell align="right">{data.admin_name}</TableCell>
-                      <TableCell align="right">{data.admin_email}</TableCell>
-                      <TableCell align="right">{data.role_id}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Card>
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={1}
+        />
       </Container>
     </>
   );

@@ -19,6 +19,8 @@ import {
 } from '@mui/material';
 import Iconify from '../components/iconify';
 import { Modal } from 'antd';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function StaffPage() {
   const [open, setOpen] = useState(null);
@@ -38,26 +40,27 @@ export default function StaffPage() {
   const handleOk = (e) => {
     e.preventDefault();
     fetch("https://localhost:7116/api/Staff", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          staff_Name: name,
-          staff_Email: email,
-          staff_Password: password,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-            console.log("Staff Registered!");
-            form.current.reset();
-        }).catch((error) => {
-          console.log(error);
-        });
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        staff_Name: name,
+        staff_Email: email,
+        staff_Password: password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        toast.success("Staff Registered!");
+        form.current.reset();
+      }).catch((error) => {
+        console.log(error);
+        toast.error(error.toString())
+      });
     setIsModalOpen(false);
   };
 
@@ -87,11 +90,12 @@ export default function StaffPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, [handleOk]);
 
 
-  
+
 
   return (
     <>
@@ -108,69 +112,82 @@ export default function StaffPage() {
             Add Staff
           </Button>
           <Modal title="Register Staff" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <form ref={form}>
-          <TextField
-              id="staff-name"
-              label="Staff Name"
-              variant="outlined"
-              style={{marginTop: "1vw", marginRight: "1vw"}}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextField
-              id="staff-email"
-              label="Staff Email"
-              variant="outlined"
-              style={{marginTop: "1vw"}}
-              onChange={(e) => setEmail(e.target.value)}
+            <form ref={form}>
+              <TextField
+                id="staff-name"
+                label="Staff Name"
+                variant="outlined"
+                style={{ marginTop: "1vw", marginRight: "1vw" }}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <TextField
+                id="staff-email"
+                label="Staff Email"
+                variant="outlined"
+                style={{ marginTop: "1vw" }}
+                onChange={(e) => setEmail(e.target.value)}
 
-            />
-            <TextField
-              id="staff-password"
-              label="Staff Password"
-              variant="outlined"
-              type = "password"
-              style={{marginTop: "1vw"}}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </form>
+              />
+              <TextField
+                id="staff-password"
+                label="Staff Password"
+                variant="outlined"
+                type="password"
+                style={{ marginTop: "1vw" }}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </form>
           </Modal>
         </Stack>
 
         <Card>
-        <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Staff ID</TableCell>
-                    <TableCell align="right">Staff Name</TableCell>
-                    <TableCell align="right">Staff Email</TableCell>
-                    <TableCell align="right">Staff Rating</TableCell>
-                    <TableCell align="right">Staff Discount</TableCell>
-                    <TableCell align="right">Role ID</TableCell>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Staff ID</TableCell>
+                  <TableCell align="right">Staff Name</TableCell>
+                  <TableCell align="right">Staff Email</TableCell>
+                  <TableCell align="right">Staff Rating</TableCell>
+                  <TableCell align="right">Staff Discount</TableCell>
+                  <TableCell align="right">Role ID</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {datas.map((data) => (
+                  <TableRow
+                    key={data.staff_Id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {data.staff_Id}
+                    </TableCell>
+                    <TableCell align="right">{data.staff_Name}</TableCell>
+                    <TableCell align="right">{data.staff_Email}</TableCell>
+                    <TableCell align="right">{data.rating}</TableCell>
+                    <TableCell align="right">{data.staff_Discount}</TableCell>
+                    <TableCell align="right">{data.role_id}</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {datas.map((data) => (
-                    <TableRow
-                      key={data.staff_Id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {data.staff_Id}
-                      </TableCell>
-                      <TableCell align="right">{data.staff_Name}</TableCell>
-                      <TableCell align="right">{data.staff_Email}</TableCell>
-                      <TableCell align="right">{data.rating}</TableCell>
-                      <TableCell align="right">{data.staff_Discount}</TableCell>
-                      <TableCell align="right">{data.role_id}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Card>
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={1}
+        />
       </Container>
     </>
   );

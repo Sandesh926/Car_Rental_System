@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { Card, Col, Row } from "antd";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function DashboardAppPage() {
   const [totalCars, setTotalCars] = useState(0);
@@ -35,6 +37,7 @@ export default function DashboardAppPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString());
       });
   }, []);
 
@@ -53,6 +56,7 @@ export default function DashboardAppPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
@@ -71,6 +75,7 @@ export default function DashboardAppPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
@@ -92,6 +97,7 @@ export default function DashboardAppPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
@@ -110,6 +116,7 @@ export default function DashboardAppPage() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.toString())
       });
   }, []);
 
@@ -217,6 +224,19 @@ export default function DashboardAppPage() {
             </TableBody>
           </Table>
         </TableContainer>
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={1}
+        />
       </Container>
     </>
   );
