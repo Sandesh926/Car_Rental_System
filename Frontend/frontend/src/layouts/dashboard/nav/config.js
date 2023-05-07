@@ -44,21 +44,21 @@ const navConfig = [
     path: '/dashboard/rentedcars',
     icon: <DriveEtaIcon />,
   },
-  {
-    title: 'return cars',
-    path: '/dashboard/returncars',
-    icon: <ToysIcon />,
-  },
-  {
-    title: 'sales',
-    path: '/dashboard/sales',
-    icon: <DescriptionIcon />,
-  },
-  {
-    title: 'track customer',
-    path: '/dashboard/trackcustomer',
-    icon: <PeopleIcon />,
-  },
+  // {
+  //   title: 'return cars',
+  //   path: '/dashboard/returncars',
+  //   icon: <ToysIcon />,
+  // },
+  // {
+  //   title: 'sales',
+  //   path: '/dashboard/sales',
+  //   icon: <DescriptionIcon />,
+  // },
+  // {
+  //   title: 'track customer',
+  //   path: '/dashboard/trackcustomer',
+  //   icon: <PeopleIcon />,
+  // },
   {
     title: 'car damage',
     path: '/dashboard/cardamage',
